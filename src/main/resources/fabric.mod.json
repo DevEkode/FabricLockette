@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "fabric-lockette",
+  "version": "${version}",
+
+  "name": "Fabric Lockette",
+  "description": "This is a port of the famous bukkit plugin Lockette for Fabric",
+  "authors": [
+    "Ekode"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+
+  "license": "CC0-1.0",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "fr.ekode.FabricLockette.FabricLockette"
+    ]
+  },
+  "mixins": [
+    "fabric-lockette.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
