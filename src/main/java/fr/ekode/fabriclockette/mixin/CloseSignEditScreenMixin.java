@@ -1,9 +1,8 @@
-package fr.ekode.FabricLockette.mixin;
+package fr.ekode.fabriclockette.mixin;
 
-import fr.ekode.FabricLockette.events.CloseSignGuiCallback;
+import fr.ekode.fabriclockette.events.CloseSignGuiCallback;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.SignBlockEntity;
-import net.minecraft.client.gui.screen.ingame.SignEditScreen;
 import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.world.ServerWorld;

@@ -1,15 +1,17 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "fr.ekode.FabricLockette.mixin",
+  "package": "fr.ekode.fabriclockette.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [],
   "client": [],
   "server": [
-    "ContainerOpenMixin",
-    "UseSignMixin",
+    "ChestBlockMixin",
+    "CloseSignEditScreenMixin",
+    "DoorBlockMixin",
+    "ShulkerBoxBlockMixin",
     "SignBlockEntityMixin",
-    "CloseSignEditScreenMixin"
+    "UseSignMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -18,7 +18,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "fr.ekode.FabricLockette.FabricLockette"
+      "fr.ekode.fabriclockette.FabricLockette"
     ]
   },
   "mixins": [

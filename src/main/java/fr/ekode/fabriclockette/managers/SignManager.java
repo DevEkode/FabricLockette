@@ -1,16 +1,16 @@
-package fr.ekode.FabricLockette.managers;
+package fr.ekode.fabriclockette.managers;
 
 import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.GameProfileRepository;
-import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
-import fr.ekode.FabricLockette.core.TextHelpers;
-import fr.ekode.FabricLockette.extentions.SignBlockEntityExt;
-import net.minecraft.block.*;
-import net.minecraft.block.entity.*;
+import fr.ekode.fabriclockette.core.AuthHelper;
+import fr.ekode.fabriclockette.core.TextHelpers;
+import fr.ekode.fabriclockette.entities.BlockStatePos;
+import fr.ekode.fabriclockette.extentions.SignBlockEntityExt;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.WallSignBlock;
+import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.JsonHelper;
@@ -19,8 +19,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-import java.io.File;
-import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -37,7 +35,7 @@ public class SignManager {
      *
      * @return LockableContainerBlockEntity container
      */
-    public List<LockableContainerBlockEntity> getAttachedContainer() {
+    public BlockStatePos getAttachedContainer() {
         World world = this.sign.getWorld();
         assert world != null;
         BlockState state = world.getBlockState(this.sign.getPos());
@@ -47,15 +45,9 @@ public class SignManager {
             //Get attached block
             Direction facing = state.get(WallSignBlock.FACING);
             BlockPos entityPos = sign.getPos().offset(facing, -1);
-
-            BlockEntity entity = world.getBlockEntity(entityPos);
             BlockState blockState = world.getBlockState(entityPos);
-            Block block = blockState.getBlock();
 
-            if (entity instanceof LockableContainerBlockEntity) {
-                ContainerManager containerManager = new ContainerManager((LockableContainerBlockEntity) entity);
-                return containerManager.getContainers();
-            }
+            return new BlockStatePos(blockState,entityPos);
         }
         return null;
     }
@@ -97,9 +89,7 @@ public class SignManager {
      */
     public void populateSignUuids(){
         // Load Mojang online uuid retriever
-        YggdrasilAuthenticationService yggdrasilAuthenticationService = new YggdrasilAuthenticationService(Proxy.NO_PROXY, UUID.randomUUID().toString());
-        GameProfileRepository gameProfileRepository = yggdrasilAuthenticationService.createProfileRepository();
-        UserCache userCache = new UserCache(gameProfileRepository, new File("", MinecraftServer.USER_CACHE_FILE.getName()));
+        UserCache userCache = AuthHelper.getInstance().getUserCache();
 
         // For each lines of sign
         for(int i = 0; i<3; i++){

@@ -1,9 +1,12 @@
-package fr.ekode.FabricLockette.core;
+package fr.ekode.fabriclockette.core;
 
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
 public class TextHelpers {
+
+    private TextHelpers() {}
+
     /**
      * Remove type §_ colors or formating codes from text
      * @param rawText text with §_ codes to remove

@@ -1,4 +1,4 @@
-package fr.ekode.FabricLockette.extentions;
+package fr.ekode.fabriclockette.extentions;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -31,6 +31,4 @@ public interface SignBlockEntityExt {
 
     @Environment(EnvType.SERVER)
     void setEditable(boolean bl);
-
-
 }
