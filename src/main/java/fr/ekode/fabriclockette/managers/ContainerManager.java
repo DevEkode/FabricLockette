@@ -10,10 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class ContainerManager {
 
@@ -56,14 +53,15 @@ public class ContainerManager {
     }
 
     public boolean isProtected(){
-        return searchPrivateSignResult().size() > 0;
+        List<SignBlockEntity> list = searchPrivateSignResult();
+        return !list.isEmpty();
     }
 
     public List<SignBlockEntity> searchPrivateSignResult(){
         //Search for [private] sign
         Map<BlockPos,Direction> blockPosList = ProtectedBlockRepository.getAvailablePrivateSignPos(this.world,this.blockPos);
 
-        if(blockPosList == null) return null;
+        if(blockPosList == null) return Collections.emptyList();
 
         return this.searchPrivateSign(blockPosList);
     }
