@@ -12,8 +12,11 @@ import fr.ekode.fabriclockette.managers.ContainerManager;
 import fr.ekode.fabriclockette.managers.SignManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.WallSignBlock;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.*;
@@ -21,6 +24,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.lwjgl.system.CallbackI;
 
 import java.util.List;
 import java.util.Map;
@@ -93,11 +97,26 @@ public class FabricLockette implements ModInitializer {
             return ActionResult.PASS;
         });
 
+
         AttackBlockCallback.EVENT.register((playerEntity, world, hand, blockPos, direction) -> {
             BlockState state = world.getBlockState(blockPos);
+            BlockEntity blockEntity = world.getBlockEntity(blockPos);
+            // Prevent ProtectedBlocks to be broken by another player
             if(state != null && state.getBlock() instanceof ProtectedBlock){
                 ContainerManager containerManager = new ContainerManager(world,blockPos);
                 if(containerManager.isProtected() && !containerManager.isOwner(playerEntity)) return ActionResult.FAIL;
+            }
+            // Prevent private sign to be broken by another player
+            if(blockEntity instanceof SignBlockEntity){
+                SignManager signManager = new SignManager((SignBlockEntity) blockEntity);
+                BlockStatePos blockStatePos = signManager.getAttachedContainer();
+
+                if(blockStatePos != null){
+                    ContainerManager containerManager = new ContainerManager(world,blockStatePos.getBlockPos());
+                    boolean isProtected = containerManager.isProtected();
+                    boolean isOwner = containerManager.isOwner(playerEntity);
+                    if(isProtected && !isOwner) return ActionResult.FAIL;
+                }
             }
             return ActionResult.PASS;
         });
