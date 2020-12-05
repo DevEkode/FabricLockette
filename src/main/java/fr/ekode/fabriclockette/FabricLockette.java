@@ -2,6 +2,7 @@ package fr.ekode.fabriclockette;
 
 import fr.ekode.fabriclockette.blocks.ProtectedBlock;
 import fr.ekode.fabriclockette.blocks.ProtectedBlockRepository;
+import fr.ekode.fabriclockette.core.PlayerHelper;
 import fr.ekode.fabriclockette.entities.BlockStatePos;
 import fr.ekode.fabriclockette.enums.PrivateTag;
 import fr.ekode.fabriclockette.events.CloseSignGuiCallback;
@@ -66,9 +67,7 @@ public class FabricLockette implements ModInitializer {
             boolean isOwner = containerManager.isOwner(player);
 
             if(isProtected && !isOwner){
-                // TODO change message when locked
-                player.sendMessage(new LiteralText("C'est marqué [private], tu sais lire non ?"), true);
-                player.playSound(SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                PlayerHelper.sendAccessDeniedMessage(player);
                 return ActionResult.FAIL;
             }
             return ActionResult.PASS;
@@ -89,8 +88,7 @@ public class FabricLockette implements ModInitializer {
                 BlockStatePos blockStatePos = signManager.getAttachedContainer();
                 ContainerManager containerManager = new ContainerManager(sign.getWorld(),blockStatePos.getBlockPos());
                 if(!containerManager.isOwner(player)){
-                    player.sendMessage(new LiteralText("C'est marqué [private], tu sais lire non ?"), true);
-                    player.playSound(SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    PlayerHelper.sendAccessDeniedMessage(player);
                     return ActionResult.FAIL;
                 }
             }

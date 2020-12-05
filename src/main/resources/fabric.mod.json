@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "fabric-lockette",
+  "id": "fabriclockette",
   "version": "${version}",
 
   "name": "Fabric Lockette",
@@ -9,8 +9,8 @@
     "Ekode"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "",
+    "sources": "https://github.com/DevEkode/FabricLockette"
   },
 
   "license": "CC0-1.0",
@@ -22,8 +22,8 @@
     ]
   },
   "mixins": [
-    "fabric-lockette.mixins.json",
-    "fabric-lockette-protectedBlocks.mixins.json"
+    "fabriclockette.mixins.json",
+    "fabriclockette-protectedBlocks.mixins.json"
   ],
 
   "depends": {
