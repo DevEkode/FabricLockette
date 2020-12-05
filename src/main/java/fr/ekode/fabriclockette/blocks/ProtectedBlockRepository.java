@@ -9,9 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class is used like a HUB of every ProtectedBlocks implementations
@@ -56,14 +54,14 @@ public class ProtectedBlockRepository {
      * @param pos block position in world
      * @return A list of BlockPos where the private sign could be placed
      */
-    public static List<BlockPos> getAvailablePrivateSignPos(World world, BlockPos pos) {
+    public static Map<BlockPos,Direction> getAvailablePrivateSignPos(World world, BlockPos pos) {
         BlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
 
         if (block instanceof ProtectedBlock) {
             // Get all blocks who could be protected by a private sign
             List<BlockStatePosProtected> protectedBlocks = getProtectedBlock(world, pos);
-            List<BlockPos> blockPosList = new ArrayList<>();
+            Map<BlockPos,Direction> posList = new HashMap<>();
 
             for (BlockStatePosProtected bspp : protectedBlocks) {
                 ProtectedBlock protectedBlock = bspp.getProtectedBlock();
@@ -74,12 +72,12 @@ public class ProtectedBlockRepository {
                 if (block instanceof ChestBlock) facing = blockState.get(ChestBlock.FACING);
                 else if (block instanceof DoorBlock) facing = blockState.get(DoorBlock.FACING);
 
-                List<BlockPos> list = protectedBlock.getAvailablePrivateSignPos(bspp.getBlockPos(), blockState, facing);
-                blockPosList.addAll(list);
+                Map<BlockPos,Direction> list = protectedBlock.getAvailablePrivateSignPos(bspp.getBlockPos(), blockState, facing);
+                posList.putAll(list);
             }
-            return blockPosList;
+            return posList;
         }
 
-        return Collections.emptyList();
+        return null;
     }
 }

@@ -22,7 +22,8 @@
     ]
   },
   "mixins": [
-    "fabric-lockette.mixins.json"
+    "fabric-lockette.mixins.json",
+    "fabric-lockette-protectedBlocks.mixins.json"
   ],
 
   "depends": {

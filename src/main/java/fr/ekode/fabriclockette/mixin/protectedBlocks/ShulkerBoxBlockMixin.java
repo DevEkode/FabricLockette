@@ -1,4 +1,4 @@
-package fr.ekode.fabriclockette.mixin;
+package fr.ekode.fabriclockette.mixin.protectedBlocks;
 
 import fr.ekode.fabriclockette.blocks.ProtectedBlock;
 import fr.ekode.fabriclockette.entities.BlockStatePosProtected;
@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Mixin(ShulkerBoxBlock.class)
 public class ShulkerBoxBlockMixin implements ProtectedBlock {
@@ -20,7 +21,7 @@ public class ShulkerBoxBlockMixin implements ProtectedBlock {
     }
 
     @Override
-    public List<BlockPos> getAvailablePrivateSignPos(BlockPos pos, BlockState state, Direction facing) {
-        return Collections.emptyList();
+    public Map<BlockPos, Direction> getAvailablePrivateSignPos(BlockPos pos, BlockState state, Direction facing) {
+        return null;
     }
 }

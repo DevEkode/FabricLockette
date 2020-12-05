@@ -89,7 +89,7 @@ public class SignBlockEntityMixin implements SignBlockEntityExt {
     }
 
     // Allow player to edit sign after first place
-    @Inject(method = "onActivate", at = @At("HEAD"))
+    @Inject(method = "onActivate", at = @At("HEAD"),cancellable = true)
     public void useOnBlock(PlayerEntity player, CallbackInfoReturnable<Boolean> callback) {
         if (player.abilities.allowModifyWorld) {
             editable = true;
@@ -97,9 +97,8 @@ public class SignBlockEntityMixin implements SignBlockEntityExt {
 
             // Send event
             ActionResult result = OpenSignGuiCallback.EVENT.invoker().interact(player, sign);
-            if (result == ActionResult.FAIL) callback.cancel();
 
-            player.openEditSignScreen(sign);
+            if (result != ActionResult.FAIL) player.openEditSignScreen(sign);
         }
     }
 }
