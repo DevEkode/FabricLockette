@@ -15,7 +15,7 @@
 
   "license": "CC0-1.0",
 
-  "environment": "*",
+  "environment": "server",
   "entrypoints": {
     "main": [
       "fr.ekode.fabriclockette.FabricLockette"
