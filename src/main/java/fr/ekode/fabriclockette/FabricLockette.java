@@ -2,6 +2,7 @@ package fr.ekode.fabriclockette;
 
 import fr.ekode.fabriclockette.blocks.ProtectedBlock;
 import fr.ekode.fabriclockette.blocks.ProtectedBlockRepository;
+import fr.ekode.fabriclockette.core.Config;
 import fr.ekode.fabriclockette.core.PlayerHelper;
 import fr.ekode.fabriclockette.entities.BlockStatePos;
 import fr.ekode.fabriclockette.enums.PrivateTag;
@@ -27,6 +28,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.lwjgl.system.CallbackI;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +36,12 @@ public class FabricLockette implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        try {
+            Config config = new Config();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         UseSignCallback.EVENT.register((player,sign) -> {
             SignManager signManager = new SignManager(sign);
             World world = sign.getWorld();

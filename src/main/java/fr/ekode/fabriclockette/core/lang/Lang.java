@@ -1,18 +1,8 @@
 package fr.ekode.fabriclockette.core.lang;
 
-import fr.ekode.fabriclockette.core.FileResourcesUtils;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import org.apache.commons.io.IOUtils;
-import org.json.JSONObject;
 
-import javax.annotation.Resource;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.ResourceBundle;
 

@@ -6,6 +6,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * https://mkyong.com/java/java-read-a-file-from-resources-folder/
@@ -76,5 +77,22 @@ public class FileResourcesUtils {
             e.printStackTrace();
         }
 
+    }
+
+    public static Properties readPropertiesFile(String fileName) throws IOException {
+        FileInputStream fis = null;
+        Properties prop = null;
+        try {
+            fis = new FileInputStream(fileName);
+            prop = new Properties();
+            prop.load(fis);
+        } catch(FileNotFoundException fnfe) {
+            fnfe.printStackTrace();
+        } catch(IOException ioe) {
+            ioe.printStackTrace();
+        } finally {
+            fis.close();
+        }
+        return prop;
     }
 }
