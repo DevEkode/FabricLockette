@@ -11,7 +11,7 @@ public class PlayerHelper {
     private PlayerHelper() {}
 
     public static void sendAccessDeniedMessage(PlayerEntity player){
-        player.sendMessage(new Lang().withKey("block.fabriclockette.denied"), true);
+        player.sendMessage(Lang.getINSTANCE().withKey("block.fabriclockette.denied"), true);
         player.playSound(SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 }
