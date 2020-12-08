@@ -36,12 +36,6 @@ public class FabricLockette implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        try {
-            Config config = Config.getInstance();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         UseSignCallback.EVENT.register((player,sign) -> {
             SignManager signManager = new SignManager(sign);
             World world = sign.getWorld();
