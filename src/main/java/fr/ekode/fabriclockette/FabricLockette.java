@@ -37,7 +37,7 @@ public class FabricLockette implements ModInitializer {
     @Override
     public void onInitialize() {
         try {
-            Config config = new Config();
+            Config config = Config.getInstance();
         } catch (IOException e) {
             e.printStackTrace();
         }
