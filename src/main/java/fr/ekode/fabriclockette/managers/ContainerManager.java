@@ -1,5 +1,6 @@
 package fr.ekode.fabriclockette.managers;
 
+import com.mojang.authlib.GameProfile;
 import fr.ekode.fabriclockette.blocks.ProtectedBlockRepository;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.WallSignBlock;
@@ -9,6 +10,7 @@ import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.*;
 
@@ -69,7 +71,13 @@ public class ContainerManager {
     public boolean isOwner(PlayerEntity player) {
         List<SignBlockEntity> privateSigns = searchPrivateSignResult();
 
-        if(privateSigns != null){
+        if(player != null && privateSigns != null){
+            GameProfile gameProfile = player.getGameProfile();
+            int opLevel = player.getServer().getOpPermissionLevel();
+            int playerOpLevel = player.getServer().getPermissionLevel(gameProfile);
+
+            if(opLevel == playerOpLevel) return true;
+
             for(SignBlockEntity sign : privateSigns){
                 // Get owners
                 SignManager signManager = new SignManager(sign);
