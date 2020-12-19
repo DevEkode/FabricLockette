@@ -65,7 +65,7 @@ public class SignManager {
         text = TextHelpers.removeMinecraftFormatingCodes(text);
 
         // Check if sign has [Private] or [More users] tag
-        return sign != null && text.equals(PrivateTag.PRIVATE.getTagWithBrackets()) || text.equals(PrivateTag.MORE_USERS.getTagWithBrackets());
+        return text.equals(PrivateTag.PRIVATE.getTagWithBrackets()) || text.equals(PrivateTag.MORE_USERS.getTagWithBrackets());
     }
 
     public List<UUID> getSignOwners(){

@@ -1,7 +1,6 @@
 package fr.ekode.fabriclockette.blocks;
 
 import fr.ekode.fabriclockette.entities.BlockStatePosProtected;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -17,7 +16,7 @@ public interface ProtectedBlock {
      * - 2 ChestBlock for double chest
      * - 2 DoorBlock for door
      * - etc ...
-     * @return
+     * @return A lit of BlockStatePosProtected
      */
     List<BlockStatePosProtected> getProtectedBlock(World world, BlockPos pos);
 

@@ -21,6 +21,7 @@ public class Config {
     static {
         Map<String,String> map = new HashMap<>();
         map.put("lang","en_US");
+        map.put("protect_shulkerbox","true");
         DEFAULT_CONFIG = Collections.unmodifiableMap(map);
     }
 

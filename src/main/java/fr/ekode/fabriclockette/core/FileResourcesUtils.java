@@ -86,11 +86,10 @@ public class FileResourcesUtils {
             fis = new FileInputStream(fileName);
             prop = new Properties();
             prop.load(fis);
-        } catch(FileNotFoundException fnfe) {
+        } catch(IOException fnfe) {
             fnfe.printStackTrace();
-        } catch(IOException ioe) {
-            ioe.printStackTrace();
         } finally {
+            assert fis != null;
             fis.close();
         }
         return prop;

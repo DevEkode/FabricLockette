@@ -6,11 +6,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.WallSignBlock;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.*;
 
@@ -55,6 +53,7 @@ public class ContainerManager {
     }
 
     public boolean isProtected(){
+        // TODO add config for enabling/disabling block protection
         List<SignBlockEntity> list = searchPrivateSignResult();
         return !list.isEmpty();
     }
