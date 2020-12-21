@@ -47,6 +47,11 @@ public class ShulkerBoxBlockMixin implements ProtectedBlock {
         return directionMap;
     }
 
+    @Override
+    public String getLocketteId() {
+        return "shulker_box";
+    }
+
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
     private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir){
         ActionResult result = ContainerOpenCallback.EVENT.invoker().interact(world,player,state,pos);

@@ -88,7 +88,7 @@ public class FabricLockette implements ModInitializer {
             if(signManager.isSignPrivate()){
                 BlockStatePos blockStatePos = signManager.getAttachedContainer();
                 ContainerManager containerManager = new ContainerManager(sign.getWorld(),blockStatePos.getBlockPos());
-                if(!containerManager.isOwner(player)){
+                if(containerManager.isProtected() && !containerManager.isOwner(player)){
                     PlayerHelper.sendAccessDeniedMessage(player);
                     return ActionResult.FAIL;
                 }

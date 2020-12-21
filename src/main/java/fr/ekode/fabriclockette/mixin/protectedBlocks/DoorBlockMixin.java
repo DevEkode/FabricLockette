@@ -74,6 +74,11 @@ public class DoorBlockMixin implements ProtectedBlock {
         return blockPosDirectionMap;
     }
 
+    @Override
+    public String getLocketteId() {
+        return "door";
+    }
+
     @Inject(method = "onUse", at = @At("INVOKE"), cancellable = true)
     private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir){
         ActionResult result = ContainerOpenCallback.EVENT.invoker().interact(world,player,state,pos);

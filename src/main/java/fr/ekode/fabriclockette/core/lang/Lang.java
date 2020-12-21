@@ -26,7 +26,7 @@ public class Lang {
             locale = Locale.ROOT;
         }
         // Load from bundle
-        this.bundle = ResourceBundle.getBundle("messages",locale);
+        this.bundle = ResourceBundle.getBundle("messages", locale, ResourceBundle.Control.getNoFallbackControl(ResourceBundle.Control.FORMAT_PROPERTIES));
     }
 
     public static Lang getINSTANCE() {

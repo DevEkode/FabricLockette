@@ -27,4 +27,10 @@ public interface ProtectedBlock {
      * @return A list of direction where the private sign could be placed
      */
     Map<BlockPos,Direction> getAvailablePrivateSignPos(BlockPos pos, BlockState state, Direction facing);
+
+    /**
+     * Get the ProtectedBlock id for FabricLockette mod configuration
+     * @return a nice id (ex : chest)
+     */
+    String getLocketteId();
 }

@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
+import java.io.IOException;
 import java.util.*;
 
 public class ContainerManager {
@@ -52,8 +53,10 @@ public class ContainerManager {
         return list;
     }
 
-    public boolean isProtected(){
-        // TODO add config for enabling/disabling block protection
+    public boolean isProtected() {
+        boolean canBeProtected = ProtectedBlockRepository.canThisBlockBeProtected(world, blockPos);
+        if(!canBeProtected) return false;
+
         List<SignBlockEntity> list = searchPrivateSignResult();
         return !list.isEmpty();
     }

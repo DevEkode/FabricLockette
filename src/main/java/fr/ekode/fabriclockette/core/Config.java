@@ -1,5 +1,7 @@
 package fr.ekode.fabriclockette.core;
 
+import fr.ekode.fabriclockette.blocks.ProtectedBlock;
+
 import java.io.*;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,17 +13,21 @@ public class Config {
 
     private static Config INSTANCE = null;
 
+    public static final String PROTECTED_BLOCKS_KEY = "protect_";
+
     private static final String CONFIG_DIR = "mods/FabricLockette/";
     private static final String CONFIG_FILE = "config.properties";
     private static final String CONFIG_FILE_DESCRIPTION = "FabricLockette config file";
-    private Properties config;
 
     // Setup default config to create if needed
     private static final Map<String,String> DEFAULT_CONFIG;
     static {
         Map<String,String> map = new HashMap<>();
         map.put("lang","en_US");
-        map.put("protect_shulkerbox","true");
+        // ProtectedBlocks config
+        map.put(PROTECTED_BLOCKS_KEY+"chest","true");
+        map.put(PROTECTED_BLOCKS_KEY+"door","true");
+        map.put(PROTECTED_BLOCKS_KEY+"shulker_box","true");
         DEFAULT_CONFIG = Collections.unmodifiableMap(map);
     }
 
@@ -41,13 +47,15 @@ public class Config {
             fileSuccess = configFile.createNewFile();
             // Initialize config file
             if(fileSuccess){
-                this.config = FileResourcesUtils.readPropertiesFile(CONFIG_DIR+CONFIG_FILE);
                 initConfig();
                 created = true;
             }
         }
-        this.config = FileResourcesUtils.readPropertiesFile(CONFIG_DIR+CONFIG_FILE);
         if(!created) completeConfig();
+    }
+
+    private Properties getConfig() throws IOException {
+        return FileResourcesUtils.readPropertiesFile(CONFIG_DIR+CONFIG_FILE);
     }
 
     public static Config getInstance() throws IOException {
@@ -57,22 +65,22 @@ public class Config {
         return INSTANCE;
     }
 
-    public String get(String key){
-        return this.config.getProperty(key);
+    public String get(String key) throws IOException {
+        return this.getConfig().getProperty(key);
     }
 
-    public void set(String key, String value){
-        this.config.setProperty(key,value);
+    public void set(String key, String value) throws IOException {
+        this.getConfig().setProperty(key,value);
     }
-
 
     /**
      * Initialize config file with default params and save it
      * @throws IOException cannot save config file
      */
     private void initConfig() throws IOException {
-        DEFAULT_CONFIG.forEach((key, value) -> this.config.put(key,value));
-        saveConfig();
+        Properties props = this.getConfig();
+        DEFAULT_CONFIG.forEach((key, value) -> props.put(key,value));
+        saveConfig(props);
     }
 
     /**
@@ -80,18 +88,19 @@ public class Config {
      * @throws IOException cannot save config file
      */
     private void completeConfig() throws IOException {
+        Properties props = this.getConfig();
         AtomicBoolean edited = new AtomicBoolean(false);
         DEFAULT_CONFIG.forEach((key, value) -> {
             // Check if key exists in config file
-            if(!this.config.containsKey(key)){
-                this.config.put(key,value);
+            if(!props.containsKey(key)){
+                props.put(key,value);
                 edited.set(true);
             }
         });
 
         // Save config if edited
         if(edited.get()){
-            this.saveConfig();
+            this.saveConfig(props);
         }
     }
 
@@ -99,9 +108,9 @@ public class Config {
      * Save config file
      * @throws IOException cannot save config file
      */
-    public void saveConfig() throws IOException {
+    public void saveConfig(Properties toBeSaved) throws IOException {
         String path = CONFIG_DIR+CONFIG_FILE;
         FileOutputStream outputStream = new FileOutputStream(path);
-        this.config.store(outputStream,CONFIG_FILE_DESCRIPTION);
+        toBeSaved.store(outputStream,CONFIG_FILE_DESCRIPTION);
     }
 }
