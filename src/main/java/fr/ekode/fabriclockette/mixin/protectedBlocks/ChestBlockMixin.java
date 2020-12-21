@@ -78,6 +78,11 @@ public class ChestBlockMixin implements ProtectedBlock {
         return directionBlockPosMap;
     }
 
+    @Override
+    public String getLocketteId() {
+        return "chest";
+    }
+
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
     private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir){
         ActionResult result = ContainerOpenCallback.EVENT.invoker().interact(world,player,state,pos);

@@ -2,7 +2,7 @@ package fr.ekode.fabriclockette.enums;
 
 public enum PrivateSignNbt {
 
-    OWNER("Owner");
+    OWNER("fabriclockette_owner");
 
     private String nbtTag;
 

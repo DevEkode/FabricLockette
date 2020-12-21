@@ -1,5 +1,6 @@
 package fr.ekode.fabriclockette.blocks;
 
+import fr.ekode.fabriclockette.core.Config;
 import fr.ekode.fabriclockette.entities.BlockStatePosProtected;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -9,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -28,7 +30,20 @@ public class ProtectedBlockRepository {
         BlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
 
-        return block instanceof ProtectedBlock;
+        // Check in the config if the protection is enabled for this block
+        if(block instanceof ProtectedBlock){
+            ProtectedBlock protectedBlock = (ProtectedBlock) block;
+            String configId = Config.PROTECTED_BLOCKS_KEY + protectedBlock.getLocketteId(); //protect_[block_id]
+
+            String isProtectedInConfig = null;
+            try {
+                isProtectedInConfig = Config.getInstance().get(configId);
+            } catch (IOException e) {
+                return false;
+            }
+            return isProtectedInConfig != null && isProtectedInConfig.equals("true");
+        }
+        return false;
     }
 
     /**

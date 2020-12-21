@@ -4,7 +4,6 @@ import fr.ekode.fabriclockette.core.lang.Lang;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.TranslatableText;
 
 public class PlayerHelper {
 

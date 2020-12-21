@@ -6,12 +6,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.WallSignBlock;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import org.apache.logging.log4j.core.jmx.Server;
 
+import java.io.IOException;
 import java.util.*;
 
 public class ContainerManager {
@@ -54,7 +53,10 @@ public class ContainerManager {
         return list;
     }
 
-    public boolean isProtected(){
+    public boolean isProtected() {
+        boolean canBeProtected = ProtectedBlockRepository.canThisBlockBeProtected(world, blockPos);
+        if(!canBeProtected) return false;
+
         List<SignBlockEntity> list = searchPrivateSignResult();
         return !list.isEmpty();
     }

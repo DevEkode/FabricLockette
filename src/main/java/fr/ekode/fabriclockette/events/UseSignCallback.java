@@ -6,6 +6,8 @@ import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 
+import java.io.IOException;
+
 public interface UseSignCallback {
 
     /**

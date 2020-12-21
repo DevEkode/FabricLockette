@@ -8,6 +8,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.io.IOException;
+
 public interface ContainerOpenCallback {
     /**
      * Callback for opening a container
