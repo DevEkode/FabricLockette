@@ -15,7 +15,7 @@ Go to the last release page and grab the corresponding version.
 Then copy your `Fabric API` and `FabricLockette` jar into the `mods` folder of your server.
 
 Start your server, the config file should appear into the mods folder.  
-Chest the wiki page for more details :
+Check the wiki page for more details : [Config wiki](https://github.com/DevEkode/FabricLockette/wiki/Config)
 
 # Features
 * Prevent ant protected block to be used by another player
