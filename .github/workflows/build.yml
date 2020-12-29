@@ -5,7 +5,7 @@ on: push
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+    if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 1.8
@@ -18,12 +18,12 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
-      - name: Build with Gradle
+      - name: Build with Gradle (Snapshot)
         run: ./gradlew build
       - name: Package jar into artifact
         uses: actions/upload-artifact@v2
         with:
-          name: Builds
+          name: Snapshots
           path: build/libs
   release:
     runs-on: ubuntu-latest
@@ -49,5 +49,5 @@ jobs:
       - name: Package jar into artifact
         uses: actions/upload-artifact@v2
         with:
-          name: Release
+          name: Releases
           path: build/libs
