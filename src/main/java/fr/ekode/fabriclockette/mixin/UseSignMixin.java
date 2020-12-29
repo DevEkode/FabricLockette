@@ -1,6 +1,7 @@
 package fr.ekode.fabriclockette.mixin;
 
 import fr.ekode.fabriclockette.events.UseSignCallback;
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -18,6 +19,4 @@ public class UseSignMixin {
 
         if(result == ActionResult.FAIL) ci.cancel();
     }
-
-
 }

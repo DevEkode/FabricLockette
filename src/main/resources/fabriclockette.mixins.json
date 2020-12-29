@@ -6,12 +6,10 @@
   "mixins": [],
   "client": [],
   "server": [
-    "ChestBlockMixin",
     "CloseSignEditScreenMixin",
-    "DoorBlockMixin",
-    "ShulkerBoxBlockMixin",
     "SignBlockEntityMixin",
-    "UseSignMixin"
+    "UseSignMixin",
+    "EntityExplosionBehaviorMixin"
   ],
   "injectors": {
     "defaultRequire": 1

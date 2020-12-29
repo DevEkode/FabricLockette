@@ -2,9 +2,12 @@ package fr.ekode.fabriclockette.managers;
 
 import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
+import fr.ekode.fabriclockette.blocks.ProtectedBlock;
+import fr.ekode.fabriclockette.blocks.ProtectedBlockRepository;
 import fr.ekode.fabriclockette.core.AuthHelper;
 import fr.ekode.fabriclockette.core.TextHelpers;
 import fr.ekode.fabriclockette.entities.BlockStatePos;
+import fr.ekode.fabriclockette.enums.PrivateTag;
 import fr.ekode.fabriclockette.extentions.SignBlockEntityExt;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.WallSignBlock;
@@ -21,6 +24,7 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class SignManager {
@@ -47,7 +51,7 @@ public class SignManager {
             BlockPos entityPos = sign.getPos().offset(facing, -1);
             BlockState blockState = world.getBlockState(entityPos);
 
-            return new BlockStatePos(blockState,entityPos);
+            if(blockState.getBlock() instanceof ProtectedBlock) return new BlockStatePos(blockState,entityPos);
         }
         return null;
     }
@@ -59,7 +63,9 @@ public class SignManager {
         JsonObject json = JsonHelper.deserialize(tag.getString("Text1"));
         String text = json.get("text").getAsString();
         text = TextHelpers.removeMinecraftFormatingCodes(text);
-        return sign != null && text.equals("[private]");
+
+        // Check if sign has [Private] or [More users] tag
+        return text.equals(PrivateTag.PRIVATE.getTagWithBrackets()) || text.equals(PrivateTag.MORE_USERS.getTagWithBrackets());
     }
 
     public List<UUID> getSignOwners(){
@@ -80,7 +86,16 @@ public class SignManager {
     public void formatSign(){
         if(this.isSignPrivate()){
             ((SignBlockEntityExt)sign).setEditable(true);
-            sign.setTextOnRow(0,new LiteralText("§l[private]"));
+            Text signText = sign.getTextOnRow(0);
+
+            // [Private]
+            if(signText.equals(new LiteralText(PrivateTag.PRIVATE.getTagWithBrackets()))){
+                sign.setTextOnRow(0,new LiteralText("§l"+PrivateTag.PRIVATE.getTagWithBrackets()));
+            }
+            // [More Users]
+            else if(signText.equals(new LiteralText(PrivateTag.MORE_USERS.getTagWithBrackets()))){
+                sign.setTextOnRow(0,new LiteralText("§l"+PrivateTag.MORE_USERS.getTagWithBrackets()));
+            }
         }
     }
 
@@ -94,12 +109,13 @@ public class SignManager {
         // For each lines of sign
         for(int i = 0; i<3; i++){
             Text username = ((SignBlockEntityExt )sign).getTextOnRow(i+1);
-            if(username.asString().equals("")) continue;
+            if(username.asString().equals("")) continue; // Skip on empty line
 
             username = TextHelpers.removeMinecraftFormatingCodes(username);
             String usernameS = username.asString();
             GameProfile profile = userCache.findByName(usernameS);
 
+            // If user exist in userCache (Mojang Auth), set the text to italic and add owner
             if(profile == null){
                 usernameS = "§m"+usernameS;
                 sign.setTextOnRow(i+1,new LiteralText(usernameS));
@@ -116,9 +132,11 @@ public class SignManager {
 
     /**
      * Generate a sign with [private] and player name on first row
+     * @param player player to add in first row
+     * @param tag tag of the sign (private, more users, etc...)
      */
-    public void createDefaultSign(PlayerEntity player){
-        this.sign.setTextOnRow(0,new LiteralText("[private]"));
+    public void createDefaultSign(PlayerEntity player,PrivateTag tag){
+        this.sign.setTextOnRow(0,new LiteralText(tag.getTagWithBrackets()));
 
         Text username = player.getDisplayName();
         this.sign.setTextOnRow(1,username);
@@ -127,5 +145,20 @@ public class SignManager {
         this.populateSignUuids();
     }
 
-
+    /**
+     * Check if a private sign can be placed
+     * @param world current world
+     * @param containerPos position of the container
+     * @param signPos position of the sign
+     * @param signFacing facing direction of the sign
+     * @return if the private sign can be placed here
+     */
+    public boolean canPlacePrivateSign(World world, BlockPos containerPos, BlockPos signPos, Direction signFacing){
+        Map<BlockPos, Direction> blockPosList = ProtectedBlockRepository.getAvailablePrivateSignPos(world,containerPos);
+        if(blockPosList != null){
+            Direction facingPos = blockPosList.get(signPos);
+            return signFacing.equals(facingPos);
+        }
+        return false;
+    }
 }

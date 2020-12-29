@@ -1,4 +1,4 @@
-package fr.ekode.fabriclockette.mixin;
+package fr.ekode.fabriclockette.mixin.protectedBlocks;
 
 import fr.ekode.fabriclockette.blocks.ProtectedBlock;
 import fr.ekode.fabriclockette.core.ChestHelpers;
@@ -9,6 +9,7 @@ import net.minecraft.block.ChestBlock;
 import net.minecraft.block.DoubleBlockProperties;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -18,10 +19,13 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Mixin(ChestBlock.class)
 public class ChestBlockMixin implements ProtectedBlock {
@@ -49,7 +53,7 @@ public class ChestBlockMixin implements ProtectedBlock {
     }
 
     @Override
-    public List<BlockPos> getAvailablePrivateSignPos(BlockPos pos, BlockState state, Direction facing) {
+    public Map<BlockPos,Direction> getAvailablePrivateSignPos(BlockPos pos, BlockState state, Direction facing) {
         // Ignore UP and DOWN direction because signs cannot be placed here
         List<Direction> directions = new ArrayList<>();
         directions.add(Direction.NORTH);
@@ -66,19 +70,24 @@ public class ChestBlockMixin implements ProtectedBlock {
         }
 
         // Translate directions to BlockPos
-        List<BlockPos> posList = new ArrayList<>();
+        Map<BlockPos,Direction> directionBlockPosMap = new HashMap<>();
         for(Direction dir : directions){
-            posList.add(pos.offset(dir)); // Offset = +1
+            directionBlockPosMap.put(pos.offset(dir),dir);
         }
 
-        return posList;
+        return directionBlockPosMap;
+    }
+
+    @Override
+    public String getLocketteId() {
+        return "chest";
     }
 
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
     private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir){
         ActionResult result = ContainerOpenCallback.EVENT.invoker().interact(world,player,state,pos);
 
-        if(result == ActionResult.FAIL) cir.setReturnValue(ActionResult.FAIL);
+        if(result == ActionResult.FAIL) cir.setReturnValue(ActionResult.PASS);
     }
 }
 
