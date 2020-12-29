@@ -1,13 +1,14 @@
 plugins {
     id 'fabric-loom' version '0.5-SNAPSHOT'
     id 'maven-publish'
+    id 'nebula.release' version '15.2.0'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 archivesBaseName = project.archives_base_name
-version = project.mod_version
+//version = project.mod_version
 group = project.maven_group
 
 dependencies {
@@ -23,6 +24,9 @@ dependencies {
     // You may need to force-disable transitiveness on them.
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.14.0'
 
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-configuration2
+    compile group: 'org.apache.commons', name: 'commons-configuration2', version: '2.7'
+
     // https://mvnrepository.com/artifact/org.mockito/mockito-all
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 
@@ -31,7 +35,7 @@ dependencies {
 }
 
 processResources {
-    inputs.property "version", project.version
+    //inputs.property "version", project.version
 
     from(sourceSets.main.resources.srcDirs) {
         include "fabric.mod.json"
