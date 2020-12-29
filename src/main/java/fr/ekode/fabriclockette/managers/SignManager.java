@@ -85,8 +85,8 @@ public class SignManager {
      */
     public void formatSign(){
         if(this.isSignPrivate()){
-            ((SignBlockEntityExt)sign).setEditable(true);
-            Text signText = sign.getTextOnRow(0);
+            ((SignBlockEntityExt)sign).setEditableServer(true);
+            Text signText = ((SignBlockEntityExt)sign).getTextOnRowServer(0);
 
             // [Private]
             if(signText.equals(new LiteralText(PrivateTag.PRIVATE.getTagWithBrackets()))){
@@ -108,7 +108,7 @@ public class SignManager {
 
         // For each lines of sign
         for(int i = 0; i<3; i++){
-            Text username = ((SignBlockEntityExt )sign).getTextOnRow(i+1);
+            Text username = ((SignBlockEntityExt )sign).getTextOnRowServer(i+1);
             if(username.asString().equals("")) continue; // Skip on empty line
 
             username = TextHelpers.removeMinecraftFormatingCodes(username);

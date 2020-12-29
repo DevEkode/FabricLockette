@@ -26,9 +26,7 @@ public interface SignBlockEntityExt {
      * @param row line
      * @return text of row
      */
-    @Environment(EnvType.SERVER)
-    Text getTextOnRow(int row);
+    Text getTextOnRowServer(int row);
 
-    @Environment(EnvType.SERVER)
-    void setEditable(boolean bl);
+    void setEditableServer(boolean bl);
 }

@@ -56,14 +56,12 @@ public class SignBlockEntityMixin implements SignBlockEntityExt {
     }
 
     // Add getTextOnRow function on SERVER environnement
-    @Environment(EnvType.SERVER)
-    public Text getTextOnRow(int row) {
+    public Text getTextOnRowServer(int row) {
         return this.text[row];
     }
 
     // Add setEditable function on SERVER environnement
-    @Environment(EnvType.SERVER)
-    public void setEditable(boolean bl) {
+    public void setEditableServer(boolean bl) {
         this.editable = bl;
     }
 
