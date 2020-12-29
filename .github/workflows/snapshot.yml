@@ -1,16 +1,8 @@
-name: Build
+name: Snapshot
 
 on:
   push:
-    tags-ignore:
-      - "v*"
     branches:
-      - main
-  pull_request:
-    tags-ignore:
-      - "v*"
-    branches:
-      - main
       - develop
 
 jobs:
@@ -28,5 +20,10 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
-      - name: Testing build
-        run: ./gradlew build
+      - name: Build with Gradle (Snapshot)
+        run: ./gradlew devSnapshot
+      - name: Package jar into artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Snapshots
+          path: build/libs

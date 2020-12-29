@@ -1,4 +1,6 @@
 # FabricLockette
+![Build](https://github.com/DevEkode/FabricLockette/workflows/Build/badge.svg)  
+
 Port of the famous bukkit/spigot plugin "Lockette" for Fabric
 
 * Re-made plugin :  [LockettePro](https://www.spigotmc.org/resources/lockettepro-for-1-14-1-15-1-16.74354/)
