@@ -1,4 +1,5 @@
-# FabricLockette
+![FabricLockette banner](./ressources/FabricLockette_banner.png)
+
 ![Build](https://github.com/DevEkode/FabricLockette/workflows/Build/badge.svg)  
 
 Port of the famous bukkit/spigot plugin "Lockette" for Fabric
@@ -18,7 +19,7 @@ Start your server, the config file should appear into the mods folder.
 Check the wiki page for more details : [Config wiki](https://github.com/DevEkode/FabricLockette/wiki/Config)
 
 # Features
-* Prevent ant protected block to be used by another player
+* Prevent any protected block to be used by another player
 * Protect from TNT
 * Support UUID
 * Server-side Fabric installation (no client mod required)
