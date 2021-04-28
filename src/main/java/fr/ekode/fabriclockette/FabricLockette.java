@@ -27,7 +27,7 @@ public class FabricLockette implements ModInitializer {
     public void onInitialize() {
 
         // When a player place a sign
-        UseSignCallback.EVENT.register((player,sign) -> {
+        /*UseSignCallback.EVENT.register((player,sign) -> {
             SignManager signManager = new SignManager(sign);
             World world = sign.getWorld();
 
@@ -58,7 +58,7 @@ public class FabricLockette implements ModInitializer {
             }
 
             return ActionResult.PASS;
-        });
+        });*/
 
         // When a player open a container
         ContainerOpenCallback.EVENT.register((world, player, state, pos) -> {
@@ -79,6 +79,8 @@ public class FabricLockette implements ModInitializer {
             if(signManager.isSignPrivate() & signManager.getAttachedContainer() != null){
                 signManager.formatSign();
                 signManager.populateSignUuids();
+            }else{
+                signManager.removeSignOwners();
             }
             return ActionResult.PASS;
         });

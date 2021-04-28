@@ -89,6 +89,12 @@ public class SignManager {
         return owners;
     }
 
+    public void removeSignOwners(){
+        for(int i = 0;i<3;i++){
+            ((SignBlockEntityExt) sign).setOwner(i+1,null);
+        }
+    }
+
     /**
      * Add some formating (like [private] in bloc) for feedback
      */
