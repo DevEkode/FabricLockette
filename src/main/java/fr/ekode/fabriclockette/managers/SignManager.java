@@ -117,9 +117,11 @@ public class SignManager {
 
             // If user exist in userCache (Mojang Auth), set the text to italic and add owner
             if(profile == null){
+                // Get offline player uuid and set the text to Strikethrough
+                UUID offlineUUid = PlayerEntity.getOfflinePlayerUuid(usernameS);
                 usernameS = "§m"+usernameS;
                 sign.setTextOnRow(i+1,new LiteralText(usernameS));
-                ((SignBlockEntityExt) sign).setOwner(i+1,null);
+                ((SignBlockEntityExt) sign).setOwner(i+1,offlineUUid);
                 continue;
             }
             usernameS = "§o"+usernameS;
