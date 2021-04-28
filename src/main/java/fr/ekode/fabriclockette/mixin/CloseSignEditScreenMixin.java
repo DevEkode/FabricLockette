@@ -14,11 +14,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import java.util.List;
+
 @Mixin(ServerPlayNetworkHandler.class)
 public class CloseSignEditScreenMixin {
 
-    @Inject(method = "onSignUpdate",locals = LocalCapture.CAPTURE_FAILSOFT,cancellable = true, at = @At(value = "INVOKE", target="Lnet/minecraft/server/world/ServerWorld;updateListeners(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/block/BlockState;I)V"))
-    private void onPropertyUpdate(UpdateSignC2SPacket packet, CallbackInfo ci, ServerWorld serverWorld, BlockPos blockPos, BlockState blockState, SignBlockEntity signBlockEntity, String strings[], int i){
+    @Inject(method = "method_31282",locals= LocalCapture.CAPTURE_FAILSOFT,cancellable = true, at = @At(value = "INVOKE", target="Lnet/minecraft/server/world/ServerWorld;updateListeners(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/block/BlockState;I)V"))
+    private void onSignUpdate(UpdateSignC2SPacket updateSignC2SPacket, List list, CallbackInfo ci, ServerWorld serverWorld, BlockPos blockPos, BlockState blockState, SignBlockEntity signBlockEntity){
         ActionResult result = CloseSignGuiCallback.EVENT.invoker().interact(signBlockEntity);
 
         if(result == ActionResult.FAIL) ci.cancel();
