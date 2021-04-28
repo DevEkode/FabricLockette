@@ -48,8 +48,14 @@ public class SignManager {
         if (state.getBlock() instanceof WallSignBlock) {
             //Get attached block
             Direction facing = state.get(WallSignBlock.FACING);
+            // Check behind block
             BlockPos entityPos = sign.getPos().offset(facing, -1);
             BlockState blockState = world.getBlockState(entityPos);
+            if(blockState == null || !(blockState.getBlock() instanceof ProtectedBlock)){
+                // Check below block
+                entityPos = entityPos.offset(Direction.Axis.Y,-1);
+                blockState = world.getBlockState(entityPos);
+            }
 
             if(blockState.getBlock() instanceof ProtectedBlock) return new BlockStatePos(blockState,entityPos);
         }
@@ -65,7 +71,10 @@ public class SignManager {
         text = TextHelpers.removeMinecraftFormatingCodes(text);
 
         // Check if sign has [Private] or [More users] tag
-        return text.equals(PrivateTag.PRIVATE.getTagWithBrackets()) || text.equals(PrivateTag.MORE_USERS.getTagWithBrackets());
+        boolean hasTag = text.equals(PrivateTag.PRIVATE.getTagWithBrackets()) || text.equals(PrivateTag.MORE_USERS.getTagWithBrackets());
+        // Check if sign has at least one name
+        boolean hasOwners = !getSignOwners().isEmpty();
+        return hasTag && hasOwners;
     }
 
     public List<UUID> getSignOwners(){
@@ -108,6 +117,9 @@ public class SignManager {
 
         // For each lines of sign
         for(int i = 0; i<3; i++){
+            // reset owner
+            ((SignBlockEntityExt) sign).setOwner(i+1,null);
+
             Text username = ((SignBlockEntityExt )sign).getTextOnRowServer(i+1);
             if(username.asString().equals("")) continue; // Skip on empty line
 
@@ -143,8 +155,8 @@ public class SignManager {
         Text username = player.getDisplayName();
         this.sign.setTextOnRow(1,username);
 
-        this.formatSign();
         this.populateSignUuids();
+        this.formatSign();
     }
 
     /**
