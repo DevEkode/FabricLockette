@@ -13,4 +13,9 @@ public class PlayerHelper {
         player.sendMessage(Lang.getINSTANCE().withKey("block.fabriclockette.denied"), true);
         player.playSound(SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
+
+    public static void sendBlockProtectedMessage(PlayerEntity player){
+        player.sendMessage(Lang.getINSTANCE().withKey("block.fabriclockette.protected"), true);
+        player.playSound(SoundEvents.BLOCK_CHEST_LOCKED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+    }
 }

@@ -50,6 +50,7 @@ public class FabricLockette implements ModInitializer {
                             // Create a [private] sign
                             signManager.createDefaultSign(player, PrivateTag.PRIVATE);
                         }
+                        PlayerHelper.sendBlockProtectedMessage(player);
                         // Prevent sign GUI to be opened
                         return ActionResult.FAIL;
                     }

@@ -3,7 +3,7 @@ package fr.ekode.fabriclockette.mixin.protectedBlocks;
 import fr.ekode.fabriclockette.blocks.ProtectedBlock;
 import fr.ekode.fabriclockette.entities.BlockStatePosProtected;
 import fr.ekode.fabriclockette.events.ContainerOpenCallback;
-import net.fabricmc.loom.util.FabricApiExtension;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DoorBlock;
 import net.minecraft.block.enums.DoubleBlockHalf;
