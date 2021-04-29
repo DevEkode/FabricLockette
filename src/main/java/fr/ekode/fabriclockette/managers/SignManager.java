@@ -72,9 +72,7 @@ public class SignManager {
 
         // Check if sign has [Private] or [More users] tag
         boolean hasTag = text.equals(PrivateTag.PRIVATE.getTagWithBrackets()) || text.equals(PrivateTag.MORE_USERS.getTagWithBrackets());
-        // Check if sign has at least one name
-        boolean hasOwners = !getSignOwners().isEmpty();
-        return hasTag && hasOwners;
+        return hasTag;
     }
 
     public List<UUID> getSignOwners(){
@@ -83,10 +81,15 @@ public class SignManager {
         // Search each lines (2 to 4)
         for(int i = 0;i<3;i++){
             UUID owner = ((SignBlockEntityExt) sign).getOwner(i+1);
+            if(owner == null) continue;
             owners.add(owner);
         }
 
         return owners;
+    }
+
+    public boolean hasOwners(){
+        return !this.getSignOwners().isEmpty();
     }
 
     public void removeSignOwners(){

@@ -17,6 +17,7 @@ public class EventRepository {
         this.registratorList.add(new AttackBlock());
         this.registratorList.add(new CloseSignGui());
         this.registratorList.add(new OpenSignGui());
+        this.registratorList.add(new ContainerOpen());
         //this.registratorList.add(new UseSign());
     }
 
