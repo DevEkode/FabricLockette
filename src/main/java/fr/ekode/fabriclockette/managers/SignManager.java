@@ -2,6 +2,7 @@ package fr.ekode.fabriclockette.managers;
 
 import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
+import fr.ekode.fabriclockette.api.ApiUser;
 import fr.ekode.fabriclockette.blocks.ProtectedBlock;
 import fr.ekode.fabriclockette.blocks.ProtectedBlockRepository;
 import fr.ekode.fabriclockette.core.AuthHelper;
@@ -22,6 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -72,9 +74,7 @@ public class SignManager {
 
         // Check if sign has [Private] or [More users] tag
         boolean hasTag = text.equals(PrivateTag.PRIVATE.getTagWithBrackets()) || text.equals(PrivateTag.MORE_USERS.getTagWithBrackets());
-        // Check if sign has at least one name
-        boolean hasOwners = !getSignOwners().isEmpty();
-        return hasTag && hasOwners;
+        return hasTag;
     }
 
     public List<UUID> getSignOwners(){
@@ -83,10 +83,15 @@ public class SignManager {
         // Search each lines (2 to 4)
         for(int i = 0;i<3;i++){
             UUID owner = ((SignBlockEntityExt) sign).getOwner(i+1);
+            if(owner == null) continue;
             owners.add(owner);
         }
 
         return owners;
+    }
+
+    public boolean hasOwners(){
+        return !this.getSignOwners().isEmpty();
     }
 
     public void removeSignOwners(){
@@ -117,9 +122,9 @@ public class SignManager {
     /**
      * Add UUID for each username on sign
      */
-    public void populateSignUuids(){
+    public void populateSignUuids() {
         // Load Mojang online uuid retriever
-        UserCache userCache = AuthHelper.getInstance().getUserCache();
+        AuthHelper authHelper = AuthHelper.getInstance();
 
         // For each lines of sign
         for(int i = 0; i<3; i++){
@@ -131,22 +136,29 @@ public class SignManager {
 
             username = TextHelpers.removeMinecraftFormatingCodes(username);
             String usernameS = username.asString();
-            GameProfile profile = userCache.findByName(usernameS);
+            try {
+                ApiUser profile = authHelper.getOnlineUUID(usernameS);
 
-            // If user exist in userCache (Mojang Auth), set the text to italic and add owner
-            if(profile == null){
-                // Get offline player uuid and set the text to Strikethrough
-                UUID offlineUUid = PlayerEntity.getOfflinePlayerUuid(usernameS);
+                // If user exist in userCache (Mojang Auth), set the text to italic and add owner
+                if(profile == null){
+                    // Get offline player uuid and set the text to Strikethrough
+                    UUID offlineUUid = PlayerEntity.getOfflinePlayerUuid(usernameS);
+                    usernameS = "§o"+usernameS;
+                    sign.setTextOnRow(i+1,new LiteralText(usernameS));
+                    ((SignBlockEntityExt) sign).setOwner(i+1,offlineUUid);
+                    continue;
+                }
+                usernameS = "§o"+usernameS;
+                sign.setTextOnRow(i+1,new LiteralText(usernameS));
+                UUID userUuid = profile.getUUID();
+
+                ((SignBlockEntityExt) sign).setOwner(i+1,userUuid);
+            } catch (IOException e) {
+                e.printStackTrace();
+
                 usernameS = "§m"+usernameS;
                 sign.setTextOnRow(i+1,new LiteralText(usernameS));
-                ((SignBlockEntityExt) sign).setOwner(i+1,offlineUUid);
-                continue;
             }
-            usernameS = "§o"+usernameS;
-            sign.setTextOnRow(i+1,new LiteralText(usernameS));
-            UUID userUuid = profile.getId();
-
-            ((SignBlockEntityExt) sign).setOwner(i+1,userUuid);
         }
     }
 

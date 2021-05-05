@@ -19,6 +19,6 @@ public class TextHelpers {
     }
 
     public static String removeMinecraftFormatingCodes(String rawText){
-        return rawText.replaceAll("§[a0-z9]","");
+        return rawText.replaceAll("\\§[a0-z9]","");
     }
 }
