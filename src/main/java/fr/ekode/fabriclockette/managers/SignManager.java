@@ -155,7 +155,7 @@ public class SignManager {
                 ((SignBlockEntityExt) sign).setOwner(i+1,userUuid);
             } catch (IOException e) {
                 e.printStackTrace();
-                
+
                 usernameS = "§m"+usernameS;
                 sign.setTextOnRow(i+1,new LiteralText(usernameS));
             }
