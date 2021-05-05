@@ -5,7 +5,10 @@ import fr.ekode.fabriclockette.entities.BlockStatePosProtected;
 import fr.ekode.fabriclockette.events.ContainerOpenCallback;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ChestBlock;
 import net.minecraft.block.DoorBlock;
+import net.minecraft.block.DoubleBlockProperties;
+import net.minecraft.block.enums.DoorHinge;
 import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
@@ -71,6 +74,8 @@ public class DoorBlockMixin implements ProtectedBlock {
             blockPosDirectionMap.put(pos.offset(opposite).up(2),opposite);
         }
 
+        DoorHinge hinge = state.get(DoorBlock.HINGE);
+
         return blockPosDirectionMap;
     }
 
@@ -79,13 +84,14 @@ public class DoorBlockMixin implements ProtectedBlock {
         return "door";
     }
 
-    @Inject(method = "onUse", at = @At("INVOKE"), cancellable = true)
+    @Inject(method = "onUse", at = @At(value= "INVOKE",target="Lnet/minecraft/world/World;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;I)Z"), cancellable = true)
     private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir){
         ActionResult result = ContainerOpenCallback.EVENT.invoker().interact(world,player,state,pos);
 
         if(result == ActionResult.FAIL){
-            state = (BlockState)state.cycle(DoorBlock.OPEN);
-            world.setBlockState(pos, state, 10);
+            //state = (BlockState)state.cycle(DoorBlock.OPEN);
+            //world.setBlockState(pos, state, 10);
+            cir.setReturnValue(ActionResult.PASS);
         }
     }
 
