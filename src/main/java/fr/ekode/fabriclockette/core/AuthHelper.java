@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
 
-public class AuthHelper {
+public final class AuthHelper {
 
     /**
      * INSTANCE of the current AuthHelper.
@@ -30,11 +30,21 @@ public class AuthHelper {
 
     }
 
+    /**
+     * Get current AuthHelper Instance
+     * @return AuthHelper Instance
+     */
     public static AuthHelper getInstance() {
         return INSTANCE;
     }
 
-    public ApiUser getOnlineUUID(String username) throws IOException {
+    /**
+     * Get Minecraft player UUID with his username using Mojang API
+     * @param username Minecraft username
+     * @return ApiUser reponse from API
+     * @throws IOException
+     */
+    public ApiUser getOnlineUUID(final String username) throws IOException {
         Call<ApiUser> user = this.service.getUser(username);
         return user.execute().body();
     }

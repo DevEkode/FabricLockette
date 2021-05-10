@@ -13,21 +13,21 @@ import java.util.UUID;
 public class ApiUser {
 
     /**
-     * Minecraft username from the API response
+     * Minecraft username from the API response.
      */
     @SerializedName("name")
     @Expose
     private String name;
 
     /**
-     * String UUID from the API response
+     * String UUID from the API response.
      */
     @SerializedName("id")
     @Expose
     private String id;
 
     /**
-     * Getter of name
+     * Getter of name.
      * @return Minecraft username
      */
     public String getName() {
@@ -35,7 +35,7 @@ public class ApiUser {
     }
 
     /**
-     * Getter of id by converting into Java UUID with uuid-creator
+     * Getter of id by converting into Java UUID with uuid-creator.
      * @return Minecraft user UUID
      */
     public UUID getUUID() {

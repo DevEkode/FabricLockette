@@ -25,17 +25,17 @@ import java.util.Map;
 @Mixin(ShulkerBoxBlock.class)
 public class ShulkerBoxBlockMixin implements ProtectedBlock {
     @Override
-    public List<BlockStatePosProtected> getProtectedBlock(World world, BlockPos pos) {
+    public final List<BlockStatePosProtected> getProtectedBlock(final World world, final BlockPos pos) {
         List<BlockStatePosProtected> protectedList = new ArrayList<>();
 
         BlockState state = world.getBlockState(pos);
 
-        protectedList.add(new BlockStatePosProtected(state,pos,this));
+        protectedList.add(new BlockStatePosProtected(state, pos, this));
         return protectedList;
     }
 
     @Override
-    public Map<BlockPos, Direction> getAvailablePrivateSignPos(BlockPos pos, BlockState state, Direction facing) {
+    public final Map<BlockPos, Direction> getAvailablePrivateSignPos(final BlockPos pos, final BlockState state, final Direction facing) {
         List<Direction> directions = new ArrayList<>();
         directions.add(Direction.NORTH);
         directions.add(Direction.SOUTH);
@@ -43,8 +43,8 @@ public class ShulkerBoxBlockMixin implements ProtectedBlock {
         directions.add(Direction.WEST);
 
         Map<BlockPos, Direction> directionMap = new HashMap<>();
-        for(Direction d : directions){
-            directionMap.put(pos.offset(d),d);
+        for (Direction d : directions) {
+            directionMap.put(pos.offset(d), d);
         }
 
         return directionMap;
@@ -56,9 +56,9 @@ public class ShulkerBoxBlockMixin implements ProtectedBlock {
     }
 
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
-    private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir){
-        ActionResult result = ContainerOpenCallback.EVENT.invoker().interact(world,player,state,pos);
+    private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
+        ActionResult result = ContainerOpenCallback.EVENT.invoker().interact(world, player, state, pos);
 
-        if(result == ActionResult.FAIL) cir.setReturnValue(ActionResult.PASS);
+        if (result == ActionResult.FAIL) cir.setReturnValue(ActionResult.PASS);
     }
 }

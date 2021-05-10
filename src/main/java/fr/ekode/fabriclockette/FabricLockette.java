@@ -13,7 +13,6 @@ public class FabricLockette implements ModInitializer {
     public void onInitialize() {
 
         FabricLogger.logInfo("FabricLockette mod by Ekode (ekode.fr)");
-        
         // Register events and implementations
         EventRepository eventRepository = new EventRepository();
         eventRepository.registerEvents();

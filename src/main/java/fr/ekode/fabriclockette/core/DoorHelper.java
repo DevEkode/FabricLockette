@@ -9,27 +9,34 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-public class DoorHelper {
+public final class DoorHelper {
 
-    private DoorHelper() {}
+    private DoorHelper() {
+    }
 
-    public static Direction getDirectionOfSecondDoor(Direction facing, DoorHinge hinge){
+    /**
+     * Return the direction of the second BlockDoor using initial facing and hinge.
+     * @param facing Original door facing
+     * @param hinge Original door hinge state
+     * @return Direction of the second door
+     */
+    public static Direction getDirectionOfSecondDoor(Direction facing, DoorHinge hinge) {
         Direction secondDoorDir = null;
-        switch(facing){
+        switch (facing) {
             case EAST:
-                if(hinge == DoorHinge.RIGHT) secondDoorDir = Direction.NORTH;
+                if (hinge == DoorHinge.RIGHT) secondDoorDir = Direction.NORTH;
                 else secondDoorDir = Direction.SOUTH;
                 break;
             case WEST:
-                if(hinge == DoorHinge.RIGHT) secondDoorDir = Direction.SOUTH;
+                if (hinge == DoorHinge.RIGHT) secondDoorDir = Direction.SOUTH;
                 else secondDoorDir = Direction.NORTH;
                 break;
             case NORTH:
-                if(hinge == DoorHinge.RIGHT) secondDoorDir = Direction.WEST;
+                if (hinge == DoorHinge.RIGHT) secondDoorDir = Direction.WEST;
                 else secondDoorDir = Direction.EAST;
                 break;
             case SOUTH:
-                if(hinge == DoorHinge.RIGHT) secondDoorDir = Direction.EAST;
+                if (hinge == DoorHinge.RIGHT) secondDoorDir = Direction.EAST;
                 else secondDoorDir = Direction.WEST;
                 break;
             default:
@@ -38,16 +45,23 @@ public class DoorHelper {
         return secondDoorDir;
     }
 
-    public static BlockStatePosProtected searchSecondDoorBlock(BlockPos firstDoorPos, BlockState state, World world){
+    /**
+     * Search a second DoorBlock.
+     * @param firstDoorPos first DoorBlock position
+     * @param state first DoorBlock state
+     * @param world current world
+     * @return The second door (null if not found)
+     */
+    public static BlockStatePosProtected searchSecondDoorBlock(BlockPos firstDoorPos, BlockState state, World world) {
         DoorHinge doorHinge = state.get(DoorBlock.HINGE);
         Direction doorFacing = state.get(DoorBlock.FACING);
 
-        Direction secondDoorDir = getDirectionOfSecondDoor(doorFacing,doorHinge);
+        Direction secondDoorDir = getDirectionOfSecondDoor(doorFacing, doorHinge);
         BlockPos secondPos = firstDoorPos.offset(secondDoorDir);
         BlockState secondState = world.getBlockState(secondPos);
 
-        if(secondState.getBlock() instanceof DoorBlock){
-            return new BlockStatePosProtected(secondState,secondPos,(ProtectedBlock) secondState.getBlock());
+        if (secondState.getBlock() instanceof DoorBlock) {
+            return new BlockStatePosProtected(secondState, secondPos, (ProtectedBlock) secondState.getBlock());
         }
         return null;
     }

@@ -29,29 +29,29 @@ import java.util.Map;
 public class ChestBlockMixin implements ProtectedBlock {
 
     @Override
-    public List<BlockStatePosProtected> getProtectedBlock(World world, BlockPos pos) {
+    public final List<BlockStatePosProtected> getProtectedBlock(final World world, final BlockPos pos) {
         List<BlockStatePosProtected> protectedBlocks = new ArrayList<>();
 
         BlockState state = world.getBlockState(pos);
         ChestBlockEntity chestBlockEntity = (ChestBlockEntity) world.getBlockEntity(pos);
 
-        protectedBlocks.add(new BlockStatePosProtected(state,pos,this));
+        protectedBlocks.add(new BlockStatePosProtected(state, pos, this));
 
         // Check if the container is a double chest
         DoubleBlockProperties.Type chestType = ChestBlock.getDoubleBlockType(state);
         if (chestType != DoubleBlockProperties.Type.SINGLE) { // Search the second chest entity if double
-            ChestBlockEntity entity = ChestHelpers.searchSecondChestEntity(chestBlockEntity,state,world);
+            ChestBlockEntity entity = ChestHelpers.searchSecondChestEntity(chestBlockEntity, state, world);
             BlockState entityState = world.getBlockState(entity.getPos());
             ProtectedBlock protectedBlock = (ProtectedBlock) entityState.getBlock();
 
-            protectedBlocks.add(new BlockStatePosProtected(entityState,entity.getPos(),protectedBlock));
+            protectedBlocks.add(new BlockStatePosProtected(entityState, entity.getPos(), protectedBlock));
         }
 
         return protectedBlocks;
     }
 
     @Override
-    public Map<BlockPos,Direction> getAvailablePrivateSignPos(BlockPos pos, BlockState state, Direction facing) {
+    public final Map<BlockPos, Direction> getAvailablePrivateSignPos(final BlockPos pos, final BlockState state, final Direction facing) {
         // Ignore UP and DOWN direction because signs cannot be placed here
         List<Direction> directions = new ArrayList<>();
         directions.add(Direction.NORTH);
@@ -62,15 +62,15 @@ public class ChestBlockMixin implements ProtectedBlock {
         DoubleBlockProperties.Type chestType = ChestBlock.getDoubleBlockType(state);
         if (chestType != DoubleBlockProperties.Type.SINGLE) {
             // Get location of the other chest
-            Direction sndChestDir = ChestHelpers.getDirectionOfSecondChest(facing,chestType);
+            Direction sndChestDir = ChestHelpers.getDirectionOfSecondChest(facing, chestType);
             // Remove useless direction from list (because the sign cannot be placed here)
             directions.remove(sndChestDir);
         }
 
         // Translate directions to BlockPos
-        Map<BlockPos,Direction> directionBlockPosMap = new HashMap<>();
-        for(Direction dir : directions){
-            directionBlockPosMap.put(pos.offset(dir),dir);
+        Map<BlockPos, Direction> directionBlockPosMap = new HashMap<>();
+        for (Direction dir : directions) {
+            directionBlockPosMap.put(pos.offset(dir), dir);
         }
 
         return directionBlockPosMap;
@@ -82,10 +82,10 @@ public class ChestBlockMixin implements ProtectedBlock {
     }
 
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
-    private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir){
-        ActionResult result = ContainerOpenCallback.EVENT.invoker().interact(world,player,state,pos);
+    private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
+        ActionResult result = ContainerOpenCallback.EVENT.invoker().interact(world, player, state, pos);
 
-        if(result == ActionResult.FAIL) cir.setReturnValue(ActionResult.PASS);
+        if (result == ActionResult.FAIL) { cir.setReturnValue(ActionResult.PASS); }
     }
 }
 

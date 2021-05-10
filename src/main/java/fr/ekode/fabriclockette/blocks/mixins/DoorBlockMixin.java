@@ -29,15 +29,15 @@ import java.util.Map;
 public class DoorBlockMixin implements ProtectedBlock {
 
     @Override
-    public List<BlockStatePosProtected> getProtectedBlock(World world, BlockPos pos) {
+    public final List<BlockStatePosProtected> getProtectedBlock(final World world, final BlockPos pos) {
         List<BlockStatePosProtected> protectedBlocks = new ArrayList<>();
         BlockState state = world.getBlockState(pos);
 
-        protectedBlocks.add(new BlockStatePosProtected(state,pos,this));
+        protectedBlocks.add(new BlockStatePosProtected(state, pos, this));
 
         // Check for double doors
-        BlockStatePosProtected secondDoor = DoorHelper.searchSecondDoorBlock(pos,state,world);
-        if(secondDoor != null){
+        BlockStatePosProtected secondDoor = DoorHelper.searchSecondDoorBlock(pos, state, world);
+        if (secondDoor != null) {
             protectedBlocks.add(secondDoor);
         }
 
@@ -45,36 +45,36 @@ public class DoorBlockMixin implements ProtectedBlock {
     }
 
     @Override
-    public Map<BlockPos,Direction> getAvailablePrivateSignPos(BlockPos pos, BlockState state, Direction facing) {
+    public final Map<BlockPos, Direction> getAvailablePrivateSignPos(final BlockPos pos, final BlockState state, final Direction facing) {
         // To lock a door, the sign can be placed on the door itself or on a block above
         List<Direction> directions = new ArrayList<>();
         directions.add(facing); // Front
         directions.add(facing.getOpposite()); //Back
 
         // Translate directions to BlockPos
-        Map<BlockPos,Direction> blockPosDirectionMap = new HashMap<>();
-        for(Direction dir : directions){
-            blockPosDirectionMap.put(pos.offset(dir),dir);
+        Map<BlockPos, Direction> blockPosDirectionMap = new HashMap<>();
+        for (Direction dir : directions) {
+            blockPosDirectionMap.put(pos.offset(dir), dir);
         }
 
         // Add upper block when the DoorBlock is the UPPER part
         Direction opposite = facing.getOpposite();
-        if(state.get(DoorBlock.HALF) == DoubleBlockHalf.UPPER){
+        if (state.get(DoorBlock.HALF) == DoubleBlockHalf.UPPER) {
             // add block above
-            blockPosDirectionMap.put(pos.offset(facing).up(),facing);
-            blockPosDirectionMap.put(pos.offset(opposite).up(),opposite);
+            blockPosDirectionMap.put(pos.offset(facing).up(), facing);
+            blockPosDirectionMap.put(pos.offset(opposite).up(), opposite);
 
             // add lower half
-            blockPosDirectionMap.put(pos.offset(facing).down(),facing);
-            blockPosDirectionMap.put(pos.offset(opposite).down(),opposite);
-        }else if(state.get(DoorBlock.HALF) == DoubleBlockHalf.LOWER){
+            blockPosDirectionMap.put(pos.offset(facing).down(), facing);
+            blockPosDirectionMap.put(pos.offset(opposite).down(), opposite);
+        } else if (state.get(DoorBlock.HALF) == DoubleBlockHalf.LOWER) {
             // add upper half
-            blockPosDirectionMap.put(pos.offset(facing).up(),facing);
-            blockPosDirectionMap.put(pos.offset(opposite).up(),opposite);
+            blockPosDirectionMap.put(pos.offset(facing).up(), facing);
+            blockPosDirectionMap.put(pos.offset(opposite).up(), opposite);
 
             // add block above
-            blockPosDirectionMap.put(pos.offset(facing).up(2),facing);
-            blockPosDirectionMap.put(pos.offset(opposite).up(2),opposite);
+            blockPosDirectionMap.put(pos.offset(facing).up(2), facing);
+            blockPosDirectionMap.put(pos.offset(opposite).up(2), opposite);
         }
 
         return blockPosDirectionMap;
@@ -85,11 +85,11 @@ public class DoorBlockMixin implements ProtectedBlock {
         return "door";
     }
 
-    @Inject(method = "onUse", at = @At(value= "INVOKE",target="Lnet/minecraft/world/World;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;I)Z"), cancellable = true)
-    private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir){
-        ActionResult result = ContainerOpenCallback.EVENT.invoker().interact(world,player,state,pos);
+    @Inject(method = "onUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;I)Z"), cancellable = true)
+    private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
+        ActionResult result = ContainerOpenCallback.EVENT.invoker().interact(world, player, state, pos);
 
-        if(result == ActionResult.FAIL){
+        if (result == ActionResult.FAIL) {
             //state = (BlockState)state.cycle(DoorBlock.OPEN);
             //world.setBlockState(pos, state, 10);
             cir.setReturnValue(ActionResult.PASS);
