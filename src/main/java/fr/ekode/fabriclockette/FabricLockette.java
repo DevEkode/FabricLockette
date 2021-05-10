@@ -20,6 +20,7 @@ public class FabricLockette implements ModInitializer {
         eventRepository.registerEvents();
 
         FabricLogger.logInfo("Thank you connection_lost for the original concept !");
-
     }
+
+
 }

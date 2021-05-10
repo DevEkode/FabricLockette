@@ -1,6 +1,7 @@
 package fr.ekode.fabriclockette.mixin.protectedBlocks;
 
 import fr.ekode.fabriclockette.blocks.ProtectedBlock;
+import fr.ekode.fabriclockette.core.DoorHelper;
 import fr.ekode.fabriclockette.entities.BlockStatePosProtected;
 import fr.ekode.fabriclockette.events.ContainerOpenCallback;
 
@@ -38,6 +39,13 @@ public class DoorBlockMixin implements ProtectedBlock {
         BlockState state = world.getBlockState(pos);
 
         protectedBlocks.add(new BlockStatePosProtected(state,pos,this));
+
+        // Check for double doors
+        BlockStatePosProtected secondDoor = DoorHelper.searchSecondDoorBlock(pos,state,world);
+        if(secondDoor != null){
+            protectedBlocks.add(secondDoor);
+        }
+
         return protectedBlocks;
     }
 
@@ -73,8 +81,6 @@ public class DoorBlockMixin implements ProtectedBlock {
             blockPosDirectionMap.put(pos.offset(facing).up(2),facing);
             blockPosDirectionMap.put(pos.offset(opposite).up(2),opposite);
         }
-
-        DoorHinge hinge = state.get(DoorBlock.HINGE);
 
         return blockPosDirectionMap;
     }
