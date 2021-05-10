@@ -30,11 +30,6 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
-      # Checking for errors with linter
-      - name: Check for errors
-        uses: github/super-linter@v3
-        env:
-          VALIDATE_ALL_CODEBASE: false
       # Testing if the gradlew build succeed
       - name: Testing build
         run: ./gradlew build
