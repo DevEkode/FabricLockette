@@ -31,7 +31,7 @@ public final class AuthHelper {
     }
 
     /**
-     * Get current AuthHelper Instance
+     * Get current AuthHelper Instance.
      * @return AuthHelper Instance
      */
     public static AuthHelper getInstance() {
@@ -39,7 +39,7 @@ public final class AuthHelper {
     }
 
     /**
-     * Get Minecraft player UUID with his username using Mojang API
+     * Get Minecraft player UUID with his username using Mojang API.
      * @param username Minecraft username
      * @return ApiUser reponse from API
      * @throws IOException

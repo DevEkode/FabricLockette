@@ -4,14 +4,30 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-public class FabricLogger {
+public final class FabricLogger {
+
+    private FabricLogger() {
+
+    }
+
+    /**
+     * Instance of FabricLogger.
+     */
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static void logError(String error){
+    /**
+     * Print error log.
+     * @param error error message
+     */
+    public static void logError(final String error) {
         LOGGER.error("[FabricLockette] " + error);
     }
 
-    public static void logInfo(String info){
+    /**
+     * Print info log.
+     * @param info info message
+     */
+    public static void logInfo(final String info) {
         LOGGER.info("[FabricLockette] " + info);
     }
 }

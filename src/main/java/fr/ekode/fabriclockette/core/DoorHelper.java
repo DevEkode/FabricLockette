@@ -16,28 +16,41 @@ public final class DoorHelper {
 
     /**
      * Return the direction of the second BlockDoor using initial facing and hinge.
+     *
      * @param facing Original door facing
-     * @param hinge Original door hinge state
+     * @param hinge  Original door hinge state
      * @return Direction of the second door
      */
-    public static Direction getDirectionOfSecondDoor(Direction facing, DoorHinge hinge) {
+    public static Direction getDirectionOfSecondDoor(final Direction facing, final DoorHinge hinge) {
         Direction secondDoorDir = null;
         switch (facing) {
             case EAST:
-                if (hinge == DoorHinge.RIGHT) secondDoorDir = Direction.NORTH;
-                else secondDoorDir = Direction.SOUTH;
+                if (hinge == DoorHinge.RIGHT) {
+                    secondDoorDir = Direction.NORTH;
+                } else {
+                    secondDoorDir = Direction.SOUTH;
+                }
                 break;
             case WEST:
-                if (hinge == DoorHinge.RIGHT) secondDoorDir = Direction.SOUTH;
-                else secondDoorDir = Direction.NORTH;
+                if (hinge == DoorHinge.RIGHT) {
+                    secondDoorDir = Direction.SOUTH;
+                } else {
+                    secondDoorDir = Direction.NORTH;
+                }
                 break;
             case NORTH:
-                if (hinge == DoorHinge.RIGHT) secondDoorDir = Direction.WEST;
-                else secondDoorDir = Direction.EAST;
+                if (hinge == DoorHinge.RIGHT) {
+                    secondDoorDir = Direction.WEST;
+                } else {
+                    secondDoorDir = Direction.EAST;
+                }
                 break;
             case SOUTH:
-                if (hinge == DoorHinge.RIGHT) secondDoorDir = Direction.EAST;
-                else secondDoorDir = Direction.WEST;
+                if (hinge == DoorHinge.RIGHT) {
+                    secondDoorDir = Direction.EAST;
+                } else {
+                    secondDoorDir = Direction.WEST;
+                }
                 break;
             default:
                 return null;
@@ -47,12 +60,14 @@ public final class DoorHelper {
 
     /**
      * Search a second DoorBlock.
+     *
      * @param firstDoorPos first DoorBlock position
-     * @param state first DoorBlock state
-     * @param world current world
+     * @param state        first DoorBlock state
+     * @param world        current world
      * @return The second door (null if not found)
      */
-    public static BlockStatePosProtected searchSecondDoorBlock(BlockPos firstDoorPos, BlockState state, World world) {
+    public static BlockStatePosProtected
+        searchSecondDoorBlock(final BlockPos firstDoorPos, final BlockState state, final World world) {
         DoorHinge doorHinge = state.get(DoorBlock.HINGE);
         Direction doorFacing = state.get(DoorBlock.FACING);
 

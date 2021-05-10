@@ -51,7 +51,8 @@ public class ChestBlockMixin implements ProtectedBlock {
     }
 
     @Override
-    public final Map<BlockPos, Direction> getAvailablePrivateSignPos(final BlockPos pos, final BlockState state, final Direction facing) {
+    public final Map<BlockPos, Direction>
+        getAvailablePrivateSignPos(final BlockPos pos, final BlockState state, final Direction facing) {
         // Ignore UP and DOWN direction because signs cannot be placed here
         List<Direction> directions = new ArrayList<>();
         directions.add(Direction.NORTH);
@@ -76,16 +77,23 @@ public class ChestBlockMixin implements ProtectedBlock {
         return directionBlockPosMap;
     }
 
+    /**
+     * Get FabricLockette ID for nbt tags.
+     * @return string id
+     */
     @Override
     public String getLocketteId() {
         return "chest";
     }
 
+    @SuppressWarnings({"LineLength", "FinalParameters"})
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
     private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
         ActionResult result = ContainerOpenCallback.EVENT.invoker().interact(world, player, state, pos);
 
-        if (result == ActionResult.FAIL) { cir.setReturnValue(ActionResult.PASS); }
+        if (result == ActionResult.FAIL) {
+            cir.setReturnValue(ActionResult.PASS);
+        }
     }
 }
 

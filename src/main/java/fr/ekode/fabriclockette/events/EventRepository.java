@@ -13,6 +13,9 @@ public class EventRepository {
      */
     private List<EventRegistrator> registratorList;
 
+    /**
+     * Constructor of EventRepository.
+     */
     public EventRepository() {
         this.registratorList = new ArrayList<>();
 

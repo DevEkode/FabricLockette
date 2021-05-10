@@ -44,8 +44,16 @@ public class DoorBlockMixin implements ProtectedBlock {
         return protectedBlocks;
     }
 
+    /**
+     * Get all available private sign position for doors.
+     * @param pos current pos
+     * @param state the current state of the block
+     * @param facing the facing direction of the block
+     * @return Map of block pos and direction
+     */
     @Override
-    public final Map<BlockPos, Direction> getAvailablePrivateSignPos(final BlockPos pos, final BlockState state, final Direction facing) {
+    public final Map<BlockPos, Direction>
+        getAvailablePrivateSignPos(final BlockPos pos, final BlockState state, final Direction facing) {
         // To lock a door, the sign can be placed on the door itself or on a block above
         List<Direction> directions = new ArrayList<>();
         directions.add(facing); // Front
@@ -80,11 +88,16 @@ public class DoorBlockMixin implements ProtectedBlock {
         return blockPosDirectionMap;
     }
 
+    /**
+     * Get FabricLockette ID for nbt tags.
+     * @return string id
+     */
     @Override
     public String getLocketteId() {
         return "door";
     }
 
+    @SuppressWarnings({"LineLength", "FinalParameters"})
     @Inject(method = "onUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;I)Z"), cancellable = true)
     private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
         ActionResult result = ContainerOpenCallback.EVENT.invoker().interact(world, player, state, pos);
