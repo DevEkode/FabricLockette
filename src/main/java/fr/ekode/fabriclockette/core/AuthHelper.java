@@ -1,24 +1,21 @@
 package fr.ekode.fabriclockette.core;
 
-import com.mojang.authlib.GameProfileRepository;
-import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import fr.ekode.fabriclockette.api.ApiUser;
 import fr.ekode.fabriclockette.api.MojangService;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.UserCache;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.Proxy;
-import java.util.UUID;
 
 public class AuthHelper {
 
+    /**
+     * INSTANCE of the current AuthHelper
+     */
     private static final AuthHelper INSTANCE = new AuthHelper();
 
+    /** Service for Mojang API */
     private final MojangService service;
 
     private AuthHelper(){

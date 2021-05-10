@@ -27,5 +27,4 @@ public class ApiUser {
         UuidCodec<String> codec = new Base16Codec();
         return codec.decode(this.id);
     }
-
 }

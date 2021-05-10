@@ -1,4 +1,4 @@
-package fr.ekode.fabriclockette.mixin.protectedBlocks;
+package fr.ekode.fabriclockette.blocks.mixins;
 
 import fr.ekode.fabriclockette.blocks.ProtectedBlock;
 import fr.ekode.fabriclockette.entities.BlockStatePosProtected;
