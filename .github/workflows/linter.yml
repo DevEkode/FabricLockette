@@ -10,10 +10,10 @@ name: Lint Code Base
 #############################
 on:
   push:
-    branches-ignore: [master,develop]
+    branches-ignore: [main,develop]
     # Remove the line above to run when pushing to master
   pull_request:
-    branches: [master,develop]
+    branches: [main,develop]
 
 ###############
 # Set the Job #
