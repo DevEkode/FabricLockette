@@ -16,14 +16,22 @@ public interface CloseSignGuiCallback {
      * - FAIL cancels further processing (does nothing in this case)
      */
     Event<CloseSignGuiCallback> EVENT = EventFactory.createArrayBacked(CloseSignGuiCallback.class,
-            listeners -> (sign,player) -> {
-                for(CloseSignGuiCallback listener : listeners){
-                    ActionResult result = listener.interact(sign,player);
+            listeners -> (sign, player) -> {
+                for (CloseSignGuiCallback listener : listeners) {
+                    ActionResult result = listener.interact(sign, player);
 
-                    if(result != ActionResult.PASS) return result;
+                    if (result != ActionResult.PASS) {
+                        return result;
+                    }
                 }
                 return ActionResult.PASS;
             });
 
+    /**
+     * When the player interact with a sign.
+     * @param sign interacted sign
+     * @param player player who interacted
+     * @return Return of this action
+     */
     ActionResult interact(SignBlockEntity sign, ServerPlayerEntity player);
 }
