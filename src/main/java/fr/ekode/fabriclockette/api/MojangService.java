@@ -6,7 +6,7 @@ import retrofit2.http.Path;
 
 public interface MojangService {
     /**
-     * Call to the users/profiles/minecraft/{user} MojangAPI GET endpoint
+     * Call to the users/profiles/minecraft/{user} MojangAPI GET endpoint.
      * @param username Minecraft username
      * @return Call promise of ApiUser
      */

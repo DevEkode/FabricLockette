@@ -1,4 +1,4 @@
 /**
- * Core classes of FabricLockette
+ * Core classes of FabricLockette.
  */
 package fr.ekode.fabriclockette.core;

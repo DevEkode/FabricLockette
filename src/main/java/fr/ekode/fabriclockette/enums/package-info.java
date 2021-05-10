@@ -1,4 +1,4 @@
 /**
- * FabricLockette enums
+ * FabricLockette enums.
  */
 package fr.ekode.fabriclockette.enums;

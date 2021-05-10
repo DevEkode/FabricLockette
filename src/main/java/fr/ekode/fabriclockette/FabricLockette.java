@@ -7,7 +7,7 @@ import net.fabricmc.api.ModInitializer;
 public class FabricLockette implements ModInitializer {
 
     /**
-     * FabricMC init method
+     * FabricMC init method.
      */
     @Override
     public void onInitialize() {

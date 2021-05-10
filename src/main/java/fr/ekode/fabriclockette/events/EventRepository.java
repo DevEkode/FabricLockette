@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class to handle every EventRegistrator classes
+ * Class to handle every EventRegistrator classes.
  */
 public class EventRepository {
 

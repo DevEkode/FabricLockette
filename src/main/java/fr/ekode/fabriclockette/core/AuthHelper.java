@@ -11,14 +11,16 @@ import java.io.IOException;
 public class AuthHelper {
 
     /**
-     * INSTANCE of the current AuthHelper
+     * INSTANCE of the current AuthHelper.
      */
     private static final AuthHelper INSTANCE = new AuthHelper();
 
-    /** Service for Mojang API */
+    /**
+     * Service for Mojang API.
+     */
     private final MojangService service;
 
-    private AuthHelper(){
+    private AuthHelper() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.mojang.com/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -28,7 +30,7 @@ public class AuthHelper {
 
     }
 
-    public static AuthHelper getInstance(){
+    public static AuthHelper getInstance() {
         return INSTANCE;
     }
 
@@ -37,3 +39,4 @@ public class AuthHelper {
         return user.execute().body();
     }
 }
+

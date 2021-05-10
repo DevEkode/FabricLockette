@@ -1,13 +1,9 @@
 package fr.ekode.fabriclockette.core;
 
 import fr.ekode.fabriclockette.blocks.ProtectedBlock;
-import fr.ekode.fabriclockette.entities.BlockStatePos;
 import fr.ekode.fabriclockette.entities.BlockStatePosProtected;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DoorBlock;
-import net.minecraft.block.DoubleBlockProperties;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.enums.DoorHinge;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
