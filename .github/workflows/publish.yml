@@ -1,0 +1,33 @@
+name: Publish to CurseForge
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # Download last build artifact
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: main
+          name: Releases
+          path: build/libs
+          repo: ${{github.repository}}
+      # Send release to CurseForge
+      - name: Publish to CurseForge
+        uses: itsmeow/curseforge-upload@master
+        with:
+          token: ${{ secrets.CF_API_TOKEN }}
+          project_id: 433692
+          game_endpoint: minecraft
+          file_path: build/libs/*[0-9].jar
+          changelog: Check the changelog on https://github.com/DevEkode/FabricLockette/releases
+          game_versions: java:Java 8,minecraft-1-16:1.16.5,Fabric
+          release_type: release
