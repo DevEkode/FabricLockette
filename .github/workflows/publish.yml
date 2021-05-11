@@ -25,6 +25,8 @@ jobs:
       # Build release with Gradle
       - name: Build with Gradle (Release)
         run: ./gradlew -Prelease.useLastTag=true final
+      - id: getReleaseJar
+        run: echo "::set-output name=file::$(ls build/libs/*[0-9].jar)"
       # Send release to CurseForge
       - name: Publish to CurseForge
         uses: itsmeow/curseforge-upload@master
@@ -32,7 +34,7 @@ jobs:
           token: ${{ secrets.CF_API_TOKEN }}
           project_id: 433692
           game_endpoint: minecraft
-          file_path: build/libs/*[0-9].jar
+          file_path: ${{ steps.getReleaseJar.outputs.file }}
           changelog: Check the changelog on https://github.com/DevEkode/FabricLockette/releases
           game_versions: java:Java 8,minecraft-1-16:1.16.5,Fabric
           release_type: release
