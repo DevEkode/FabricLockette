@@ -5,22 +5,36 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import java.util.List;
+
 @Mixin(ServerPlayNetworkHandler.class)
 public class CloseSignEditScreenMixin {
 
-    @Inject(method = "onSignUpdate",locals = LocalCapture.CAPTURE_FAILSOFT,cancellable = true, at = @At(value = "INVOKE", target="Lnet/minecraft/server/world/ServerWorld;updateListeners(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/block/BlockState;I)V"))
-    private void onPropertyUpdate(UpdateSignC2SPacket packet, CallbackInfo ci, ServerWorld serverWorld, BlockPos blockPos, BlockState blockState, SignBlockEntity signBlockEntity, String strings[], int i){
-        ActionResult result = CloseSignGuiCallback.EVENT.invoker().interact(signBlockEntity);
+    /**
+     * Accessor for player prop in ServerPlayNetworkHandler.
+     */
+    @SuppressWarnings("VisibilityModifier")
+    @Shadow
+    public ServerPlayerEntity player;
 
-        if(result == ActionResult.FAIL) ci.cancel();
+    @SuppressWarnings({"LineLength", "FinalParameters"})
+    @Inject(method = "method_31282", locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true, at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;updateListeners(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/block/BlockState;I)V"))
+    private void onSignUpdate(UpdateSignC2SPacket updateSignC2SPacket, List list, CallbackInfo ci, ServerWorld serverWorld, BlockPos blockPos, BlockState blockState, SignBlockEntity signBlockEntity) {
+        ActionResult result = CloseSignGuiCallback.EVENT.invoker().interact(signBlockEntity, this.player);
+
+        if (result == ActionResult.FAIL) {
+            ci.cancel();
+        }
     }
 }
