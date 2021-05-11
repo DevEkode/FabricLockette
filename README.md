@@ -1,6 +1,7 @@
 ![FabricLockette banner](./ressources/FabricLockette_banner.png)
 
-![Build](https://github.com/DevEkode/FabricLockette/workflows/Build/badge.svg)  
+![Build](https://github.com/DevEkode/FabricLockette/workflows/Build/badge.svg)
+[![GitHub Super-Linter](https://github.com/DevEkode/FabricLockette/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
 
 Port of the famous bukkit/spigot plugin "Lockette" for Fabric
 
@@ -29,5 +30,5 @@ Check the wiki page for more details : [Config wiki](https://github.com/DevEkode
 
 # Blocks supported
 * Chest (and double chest)
-* Doors (only single door for now)
+* Door (and double doors with a single sign)
 * Chulker box
