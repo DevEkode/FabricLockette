@@ -27,4 +27,10 @@ class AuthHelperTest {
         ApiUser user = this.authHelper.getOnlineUUID(this.username);
         assertEquals(user.getUUID(),this.userUUID);
     }
+
+    @Test
+    void getOnlineUUIDName() throws IOException {
+        ApiUser user = this.authHelper.getOnlineUUID(this.username);
+        assertEquals(user.getName(),this.username);
+    }
 }
