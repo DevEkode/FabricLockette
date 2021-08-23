@@ -1,0 +1,1 @@
+package fr.ekode.fabriclockette.core.lang;

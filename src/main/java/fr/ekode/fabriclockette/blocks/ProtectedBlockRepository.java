@@ -11,27 +11,33 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
- * This class is used like a HUB of every ProtectedBlocks implementations
+ * This class is used like a HUB of every ProtectedBlocks implementations.
  */
-public class ProtectedBlockRepository {
+public final class ProtectedBlockRepository {
 
-    private ProtectedBlockRepository() {}
+    private ProtectedBlockRepository() {
+
+    }
 
     /**
-     * Check if this block can be protected by placing a private sign
+     * Check if this block can be protected by placing a private sign.
+     *
      * @param world block world
-     * @param pos block position
+     * @param pos   block position
      * @return true if the block can be protected
      */
-    public static boolean canThisBlockBeProtected(World world, BlockPos pos) {
+    public static boolean canThisBlockBeProtected(final World world, final BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
 
         // Check in the config if the protection is enabled for this block
-        if(block instanceof ProtectedBlock){
+        if (block instanceof ProtectedBlock) {
             ProtectedBlock protectedBlock = (ProtectedBlock) block;
             String configId = Config.PROTECTED_BLOCKS_KEY + protectedBlock.getLocketteId(); //protect_[block_id]
 
@@ -47,12 +53,13 @@ public class ProtectedBlockRepository {
     }
 
     /**
-     * Call the getProtectedBlock of ProtectedBlock instance
+     * Call the getProtectedBlock of ProtectedBlock instance.
+     *
      * @param world block world
-     * @param pos block position in world
+     * @param pos   block position in world
      * @return list of ProtectedBlocks
      */
-    public static List<BlockStatePosProtected> getProtectedBlock(World world, BlockPos pos) {
+    public static List<BlockStatePosProtected> getProtectedBlock(final World world, final BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
 
@@ -64,19 +71,20 @@ public class ProtectedBlockRepository {
     }
 
     /**
-     * Call getAvailablePrivateSignPos of ProtectedBlock instance
+     * Call getAvailablePrivateSignPos of ProtectedBlock instance.
+     *
      * @param world block world
-     * @param pos block position in world
+     * @param pos   block position in world
      * @return A list of BlockPos where the private sign could be placed
      */
-    public static Map<BlockPos,Direction> getAvailablePrivateSignPos(World world, BlockPos pos) {
+    public static Map<BlockPos, Direction> getAvailablePrivateSignPos(final World world, final BlockPos pos) {
         BlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
 
         if (block instanceof ProtectedBlock) {
             // Get all blocks who could be protected by a private sign
             List<BlockStatePosProtected> protectedBlocks = getProtectedBlock(world, pos);
-            Map<BlockPos,Direction> posList = new HashMap<>();
+            Map<BlockPos, Direction> posList = new HashMap<>();
 
             for (BlockStatePosProtected bspp : protectedBlocks) {
                 ProtectedBlock protectedBlock = bspp.getProtectedBlock();
@@ -84,10 +92,14 @@ public class ProtectedBlockRepository {
 
                 // Get facing for corresponding block
                 Direction facing = null;
-                if (block instanceof ChestBlock) facing = blockState.get(ChestBlock.FACING);
-                else if (block instanceof DoorBlock) facing = blockState.get(DoorBlock.FACING);
+                if (block instanceof ChestBlock) {
+                    facing = blockState.get(ChestBlock.FACING);
+                } else if (block instanceof DoorBlock) {
+                    facing = blockState.get(DoorBlock.FACING);
+                }
 
-                Map<BlockPos,Direction> list = protectedBlock.getAvailablePrivateSignPos(bspp.getBlockPos(), blockState, facing);
+                Map<BlockPos, Direction> list
+                        = protectedBlock.getAvailablePrivateSignPos(bspp.getBlockPos(), blockState, facing);
                 posList.putAll(list);
             }
             return posList;

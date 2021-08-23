@@ -8,52 +8,51 @@ import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-public class ChestHelpers {
+public final class ChestHelpers {
 
-    private ChestHelpers() {}
-
-    public static Direction getDirectionOfSecondChest(Direction facing, DoubleBlockProperties.Type chestType){
-        Direction secondChestDir = null;
-        switch (facing) { // First = RIGHT / Second = LEFT
-            case EAST:
-                if (chestType == DoubleBlockProperties.Type.FIRST) secondChestDir = Direction.NORTH;
-                else secondChestDir = Direction.SOUTH;
-                break;
-            case WEST:
-                if (chestType == DoubleBlockProperties.Type.FIRST) secondChestDir = Direction.SOUTH;
-                else secondChestDir = Direction.NORTH;
-                break;
-            case NORTH:
-                if (chestType == DoubleBlockProperties.Type.FIRST) secondChestDir = Direction.WEST;
-                else secondChestDir = Direction.EAST;
-                break;
-            case SOUTH:
-                if (chestType == DoubleBlockProperties.Type.FIRST) secondChestDir = Direction.EAST;
-                else secondChestDir = Direction.WEST;
-                break;
-            default:
-                return null;
-        }
-        return secondChestDir;
+    private ChestHelpers() {
     }
 
     /**
-     * Check and return the second chest entity of a double chest
+     * Return the direction of the attached (second) chest.
+     *
+     * @param facing    Facing direction of the first chest
+     * @param chestType ChestType of the first chest
+     * @return Facing direction of the attached chest
+     */
+    public static Direction getDirectionOfSecondChest(final Direction facing,
+                                                      final DoubleBlockProperties.Type chestType) {
+        if (facing == Direction.DOWN || facing == Direction.UP) {
+            return null;
+        }
+
+        if (chestType == DoubleBlockProperties.Type.FIRST) {
+            return facing.rotateYCounterclockwise();
+        } else {
+            return facing.rotateYClockwise();
+        }
+    }
+
+    /**
+     * Check and return the second chest entity of a double chest.
+     *
      * @param firstChest the first chest entity
      * @param blockState first chest block state
-     * @param world world of chest
+     * @param world      world of chest
      * @return BlockEntity corresponding to second chest entity / null if not found (TODO replace with exception)
      */
-    public static ChestBlockEntity searchSecondChestEntity(ChestBlockEntity firstChest, BlockState blockState, World world) {
+    public static ChestBlockEntity searchSecondChestEntity(final ChestBlockEntity firstChest,
+                                                           final BlockState blockState,
+                                                           final World world) {
         // Search neighbour container (like double chests)
         DoubleBlockProperties.Type chestType = ChestBlock.getDoubleBlockType(blockState);
         Direction chestFacing = blockState.get(ChestBlock.FACING);
 
-        Direction secondChestDir = getDirectionOfSecondChest(chestFacing,chestType);
+        Direction secondChestDir = getDirectionOfSecondChest(chestFacing, chestType);
 
         // Get second chest in world
         BlockEntity entity = world.getBlockEntity(firstChest.getPos().offset(secondChestDir));
-        if(entity instanceof ChestBlockEntity){
+        if (entity instanceof ChestBlockEntity) {
             return (ChestBlockEntity) entity;
         }
         return null;

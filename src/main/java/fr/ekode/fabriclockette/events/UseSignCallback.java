@@ -6,8 +6,6 @@ import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 
-import java.io.IOException;
-
 public interface UseSignCallback {
 
     /**
@@ -19,14 +17,22 @@ public interface UseSignCallback {
      * - FAIL cancels further processing and does not open sign GUI.
      */
     Event<UseSignCallback> EVENT = EventFactory.createArrayBacked(UseSignCallback.class,
-            (listeners) -> (player,sign) -> {
-                for(UseSignCallback listener : listeners){
-                    ActionResult result = listener.interact(player,sign);
+            (listeners) -> (player, sign) -> {
+                for (UseSignCallback listener : listeners) {
+                    ActionResult result = listener.interact(player, sign);
 
-                    if(result != ActionResult.PASS) return result;
+                    if (result != ActionResult.PASS) {
+                        return result;
+                    }
                 }
                 return ActionResult.PASS;
-    });
+            });
 
-    ActionResult interact(PlayerEntity player,SignBlockEntity sign);
+    /**
+     * When a player uses with a sign.
+     * @param player Player who uses the sign
+     * @param sign The sign being used.
+     * @return The action result
+     */
+    ActionResult interact(PlayerEntity player, SignBlockEntity sign);
 }

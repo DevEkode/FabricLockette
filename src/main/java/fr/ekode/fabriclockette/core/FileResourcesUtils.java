@@ -1,6 +1,11 @@
 package fr.ekode.fabriclockette.core;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.FileInputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -9,12 +14,17 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * https://mkyong.com/java/java-read-a-file-from-resources-folder/
+ * https://mkyong.com/java/java-read-a-file-from-resources-folder/.
  */
 public class FileResourcesUtils {
-    // get a file from the resources folder
-    // works everywhere, IDEA, unit test and JAR file.
-    public InputStream getFileFromResourceAsStream(String fileName) {
+    /**
+     * Get a file from the resources folder.
+     * works everywhere, IDEA, unit test and JAR file.
+     *
+     * @param fileName ressource file name
+     * @return The ressource input stream
+     */
+    public InputStream getFileFromResourceAsStream(final String fileName) {
 
         // The class loader that loaded the class
         ClassLoader classLoader = getClass().getClassLoader();
@@ -30,13 +40,20 @@ public class FileResourcesUtils {
     }
 
     /*
-        The resource URL is not working in the JAR
-        If we try to access a file that is inside a JAR,
-        It throws NoSuchFileException (linux), InvalidPathException (Windows)
 
-        Resource URL Sample: file:java-io.jar!/json/file1.json
      */
-    public File getFileFromResource(String fileName) throws URISyntaxException {
+
+    /**
+     * The resource URL is not working in the JAR.
+     * If we try to access a file that is inside a JAR,
+     * It throws NoSuchFileException (linux), InvalidPathException (Windows)
+     * Resource URL Sample: file:java-io.jar!/json/file1.json
+     *
+     * @param fileName Ressource file name
+     * @return Ressource file
+     * @throws URISyntaxException
+     */
+    public File getFileFromResource(final String fileName) throws URISyntaxException {
 
         ClassLoader classLoader = getClass().getClassLoader();
         URL resource = classLoader.getResource(fileName);
@@ -48,8 +65,12 @@ public class FileResourcesUtils {
 
     }
 
-    // print input stream
-    public static void printInputStream(InputStream is) {
+    /**
+     * Print input stream.
+     *
+     * @param is InputStream to print
+     */
+    public static void printInputStream(final InputStream is) {
 
         try (InputStreamReader streamReader =
                      new InputStreamReader(is, StandardCharsets.UTF_8);
@@ -66,8 +87,12 @@ public class FileResourcesUtils {
 
     }
 
-    // print a file
-    public static void printFile(File file) {
+    /**
+     * Print a file.
+     *
+     * @param file File to print
+     */
+    public static void printFile(final File file) {
 
         List<String> lines;
         try {
@@ -79,14 +104,20 @@ public class FileResourcesUtils {
 
     }
 
-    public static Properties readPropertiesFile(String fileName) throws IOException {
+    /**
+     * Return the properties of a .properties file.
+     * @param fileName properties file name
+     * @return Properties of the file
+     * @throws IOException
+     */
+    public static Properties readPropertiesFile(final String fileName) throws IOException {
         FileInputStream fis = null;
         Properties prop = null;
         try {
             fis = new FileInputStream(fileName);
             prop = new Properties();
             prop.load(fis);
-        } catch(IOException fnfe) {
+        } catch (IOException fnfe) {
             fnfe.printStackTrace();
         } finally {
             assert fis != null;
