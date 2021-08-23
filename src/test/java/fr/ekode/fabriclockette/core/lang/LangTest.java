@@ -1,18 +1,27 @@
 package fr.ekode.fabriclockette.core.lang;
 
+import fr.ekode.fabriclockette.core.Config;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+import java.io.IOException;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class LangTest {
+    @TempDir
+    static Path sharedTempDir;
 
     private Lang lang;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException {
+        Path configPath = sharedTempDir.resolve("config.properties");
+        Config.initInstance(configPath);
         this.lang = Lang.getINSTANCE();
     }
 

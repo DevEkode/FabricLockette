@@ -10,10 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ChestHelpersTest {
 
-    @BeforeEach
-    void setUp() {
-    }
-
     /* - getDirectionOfSecondChest() testing - */
 
     private Direction getDirectionSingle(Direction facing){
