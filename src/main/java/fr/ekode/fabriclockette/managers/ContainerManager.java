@@ -113,9 +113,9 @@ public class ContainerManager {
             int opLevel = player.getServer().getOpPermissionLevel();
             int playerOpLevel = player.getServer().getPermissionLevel(gameProfile);
 
-            if (opLevel == playerOpLevel) {
+            /*if (opLevel == playerOpLevel) {
                 return true;
-            }
+            }*/
 
             for (SignBlockEntity sign : privateSigns) {
                 // Get owners

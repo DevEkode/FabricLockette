@@ -7,6 +7,7 @@ import org.apache.commons.lang3.LocaleUtils;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class Lang {
@@ -37,8 +38,12 @@ public class Lang {
     }
 
     public Text withKey(String key){
-        String text = this.bundle.getString(key);
-        if(text.isEmpty()) text = NOT_FOUND_ERROR;
+        String text = "";
+        try{
+            text = this.bundle.getString(key);
+        }catch(MissingResourceException e){
+            text = NOT_FOUND_ERROR;
+        }
         return new LiteralText(text);
     }
 }
