@@ -119,6 +119,25 @@ public class SignManager {
     }
 
     /**
+     * Get sign usernames.
+     * @return list of usernames
+     */
+    public List<Text> getSignUsernames(){
+        List<Text> usernames = new ArrayList<>();
+
+        // Search each lines (2 to 4)
+        for (int i = 0; i < SIGN_LINES_NUMBER; i++) {
+            Text user = ((SignBlockEntityExt) sign).getTextOnRowServer(i + 1);
+            if (user == null) {
+                continue;
+            }
+            usernames.add(user);
+        }
+
+        return usernames;
+    }
+
+    /**
      * Check if this sign has owners.
      *
      * @return true if has owners, false if not
