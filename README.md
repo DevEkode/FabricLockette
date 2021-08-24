@@ -23,7 +23,7 @@ Check the wiki page for more details : [Config wiki](https://github.com/DevEkode
 ## Features
 * Prevent any protected block to be used by another player
 * Protect from TNT
-* Support UUID
+* Support UUID (only with `online-mode=true`, it will use usernames instead)
 * Server-side Fabric installation (no client mod required)
 * No database needed (everything is stored in the world data as nbt tags)
 * Enable and disable protection for each supported blocks.
