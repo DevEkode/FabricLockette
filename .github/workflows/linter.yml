@@ -42,3 +42,4 @@ jobs:
           reporter: github-pr-review
           level: error
           checkstyle_config: sun_checks.xml
+          fail_on_error: true
