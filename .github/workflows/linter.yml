@@ -5,13 +5,7 @@ name: Lint Code Base
 # https://help.github.com/en/articles/workflow-syntax-for-github-actions
 #
 
-#############################
-# Start the job on all push #
-#############################
 on:
-  push:
-    branches: [develop]
-    # Remove the line above to run when pushing to master
   pull_request:
     branches: [main,develop]
 
@@ -42,9 +36,9 @@ jobs:
       # Run Linter against code base #
       ################################
       - name: Lint Code Base
-        uses: github/super-linter@v3
+        uses: dbelyaev/action-checkstyle@master
         env:
-          VALIDATE_ALL_CODEBASE: false
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          FILTER_REGEX_EXCLUDE: gradlew
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          level: error
+          checkstyle_config: sun_checks.xml
