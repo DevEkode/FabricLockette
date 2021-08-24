@@ -5,8 +5,16 @@ import fr.ekode.fabriclockette.core.FileResourcesUtils;
 import java.io.IOException;
 import java.util.Objects;
 
-public class ServerConfigUtils {
+public final class ServerConfigUtils {
 
+    private ServerConfigUtils() {
+
+    }
+
+    /**
+     * Check the current value of online-mode in server configuration.
+     * @return the current value.
+     */
     public static boolean isOnline() {
         String online = null;
         try {

@@ -33,8 +33,9 @@ public class ContainerManager {
 
     /**
      * Constructor of ContainerManager.
+     *
      * @param currentWorld current word
-     * @param pos container position
+     * @param pos          container position
      */
     public ContainerManager(final World currentWorld, final BlockPos pos) {
         this.world = currentWorld;
@@ -43,6 +44,7 @@ public class ContainerManager {
 
     /**
      * Search a sign with [private] indication on LockableContainerBlockEntity.
+     *
      * @param availablePos list of available position for private signs
      * @return the sign entity attached
      */
@@ -75,6 +77,7 @@ public class ContainerManager {
 
     /**
      * Check if this container is protected by a private sign.
+     *
      * @return true if protected, false if not
      */
     public boolean isProtected() {
@@ -89,6 +92,7 @@ public class ContainerManager {
 
     /**
      * Search for private sign linked to this container.
+     *
      * @return A list of private signs
      */
     public List<SignBlockEntity> searchPrivateSignResult() {
@@ -105,6 +109,7 @@ public class ContainerManager {
 
     /**
      * Check if the player is the owner of this container.
+     *
      * @param player player to check
      * @return true if owner, false if not
      */
@@ -122,7 +127,7 @@ public class ContainerManager {
 
             for (SignBlockEntity sign : privateSigns) {
                 SignManager signManager = new SignManager(sign);
-                if(ServerConfigUtils.isOnline()){ // When the server uses Mojang auth
+                if (ServerConfigUtils.isOnline()) { // When the server uses Mojang auth
                     // Get owners
                     List<UUID> owners = signManager.getSignOwners();
 
@@ -133,13 +138,13 @@ public class ContainerManager {
                             return true;
                         }
                     }
-                }else{ // When the server is not using Mojang Auth
+                } else { // When the server is not using Mojang Auth
                     List<Text> owners = signManager.getSignUsernames();
                     String playerUsername = player.getName().getString();
 
-                    for(Text owner : owners){
+                    for (Text owner : owners) {
                         String ownerFiltered = TextHelpers.removeMinecraftFormatingCodes(owner).getString();
-                        if(ownerFiltered.equals(playerUsername)){
+                        if (ownerFiltered.equals(playerUsername)) {
                             return true;
                         }
                     }

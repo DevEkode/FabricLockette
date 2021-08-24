@@ -120,9 +120,10 @@ public class SignManager {
 
     /**
      * Get sign usernames.
+     *
      * @return list of usernames
      */
-    public List<Text> getSignUsernames(){
+    public List<Text> getSignUsernames() {
         List<Text> usernames = new ArrayList<>();
 
         // Search each lines (2 to 4)
