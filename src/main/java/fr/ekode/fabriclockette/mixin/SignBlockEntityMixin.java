@@ -6,7 +6,7 @@ import fr.ekode.fabriclockette.extentions.SignBlockEntityExt;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import org.spongepowered.asm.mixin.Final;
@@ -27,7 +27,7 @@ public class SignBlockEntityMixin implements SignBlockEntityExt {
      */
     @Shadow
     @Final
-    private Text[] text;
+    private Text[] texts;
     /**
      * Shadow of the boolean of the SignBlockEntity class.
      */
@@ -75,7 +75,7 @@ public class SignBlockEntityMixin implements SignBlockEntityExt {
      * @return Text on row
      */
     public Text getTextOnRowServer(final int row) {
-        return this.text[row];
+        return this.texts[row];
     }
 
     /**
@@ -92,25 +92,25 @@ public class SignBlockEntityMixin implements SignBlockEntityExt {
             target = "Lnet/minecraft/text/Text$Serializer;fromJson(Ljava/lang/String;)Lnet/minecraft/text/MutableText;",
             shift = At.Shift.AFTER),
             locals = LocalCapture.CAPTURE_FAILSOFT)
-    private void fromTag(final BlockState state, final CompoundTag tag, final CallbackInfo ci, final int i) {
+    private void fromTag(final BlockState state, final NbtCompound tag, final CallbackInfo ci, final int i) {
         String tagName = PrivateSignNbt.OWNER.getNbtTag() + (i + 1);
 
         if (i > 0 && tag.containsUuid(tagName)) {
             UUID owner = tag.getUuid(tagName);
-            this.owners[i - 1] = owner;
+            this.owners[i-1] = owner;
         }
     }
 
     // Inject code for saving owners into sign nbt tags
-    @Inject(method = "toTag", at = @At(value = "INVOKE",
+    @Inject(method = "writeNbt", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/text/Text$Serializer;toJson(Lnet/minecraft/text/Text;)Ljava/lang/String;",
             shift = At.Shift.AFTER),
             locals = LocalCapture.CAPTURE_FAILSOFT)
-    private void toTag(final CompoundTag tag, final CallbackInfoReturnable<CompoundTag> cir, final int i) {
+    private void writeNbt(final NbtCompound tag, final CallbackInfoReturnable<NbtCompound> cir, final int i) {
         String tagName = PrivateSignNbt.OWNER.getNbtTag() + (i + 1);
 
-        if (i > 0 && this.owners[i - 1] != null) {
-            tag.putUuid(tagName, this.owners[i - 1]);
+        if (i > 0 && this.owners[i-1] != null) {
+            tag.putUuid(tagName, this.owners[i-1]);
         }
     }
 

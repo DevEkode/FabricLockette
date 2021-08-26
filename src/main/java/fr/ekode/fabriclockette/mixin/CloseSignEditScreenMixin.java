@@ -29,7 +29,7 @@ public class CloseSignEditScreenMixin {
     public ServerPlayerEntity player;
 
     @SuppressWarnings({"LineLength", "FinalParameters"})
-    @Inject(method = "method_31282", locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true, at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;updateListeners(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/block/BlockState;I)V"))
+    @Inject(method = "method_31282", locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true, at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/SignBlockEntity;markDirty()V"))
     private void onSignUpdate(UpdateSignC2SPacket updateSignC2SPacket, List list, CallbackInfo ci, ServerWorld serverWorld, BlockPos blockPos, BlockState blockState, SignBlockEntity signBlockEntity) {
         ActionResult result = CloseSignGuiCallback.EVENT.invoker().interact(signBlockEntity, this.player);
 
