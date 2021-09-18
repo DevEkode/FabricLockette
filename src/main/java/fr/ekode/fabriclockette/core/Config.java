@@ -1,61 +1,61 @@
 package fr.ekode.fabriclockette.core;
 
-import fr.ekode.fabriclockette.blocks.ProtectedBlock;
+import net.fabricmc.loader.api.FabricLoader;
 
-import java.io.*;
-import java.util.Collections;
-import java.util.HashMap;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Config {
-
     private static Config INSTANCE = null;
 
     public static final String PROTECTED_BLOCKS_KEY = "protect_";
 
-    private static final String CONFIG_DIR = "mods/FabricLockette/";
-    private static final String CONFIG_FILE = "config.properties";
+    private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve("FabricLockette");
+    private static final Path CONFIG_FILE = CONFIG_DIR.resolve("config.properties");
     private static final String CONFIG_FILE_DESCRIPTION = "FabricLockette config file";
 
     // Setup default config to create if needed
     private static final Map<String,String> DEFAULT_CONFIG;
     static {
-        Map<String,String> map = new HashMap<>();
-        map.put("lang","en_US");
-        // ProtectedBlocks config
-        map.put(PROTECTED_BLOCKS_KEY+"chest","true");
-        map.put(PROTECTED_BLOCKS_KEY+"door","true");
-        map.put(PROTECTED_BLOCKS_KEY+"shulker_box","true");
-        DEFAULT_CONFIG = Collections.unmodifiableMap(map);
+        DEFAULT_CONFIG = Map.of(
+                "lang", "en_US",
+                // ProtectedBlocks config
+                PROTECTED_BLOCKS_KEY + "chest", "true",
+                PROTECTED_BLOCKS_KEY + "door", "true",
+                PROTECTED_BLOCKS_KEY + "shulker_box", "true"
+        );
     }
 
     private Config() throws IOException {
-        // Check if config dir exists
-        File configDir = new File(CONFIG_DIR);
-        File configFile = new File(CONFIG_DIR+CONFIG_FILE);
-        boolean dirSuccess = configDir.exists();
-        boolean fileSuccess = configFile.exists();
-        boolean created = false;
-
-        if(!dirSuccess){
-            dirSuccess = configDir.mkdir();
+        if(!Files.exists(CONFIG_DIR)) {
+            Path legacyConfigDir = FabricLoader.getInstance().getGameDir().resolve("mods/FabricLockette");
+            if (Files.exists(legacyConfigDir))
+                Files.move(legacyConfigDir, CONFIG_DIR);
+            else
+                Files.createDirectories(CONFIG_DIR);
         }
-        //Check if config file exists
-        if(dirSuccess && !fileSuccess){
-            fileSuccess = configFile.createNewFile();
-            // Initialize config file
-            if(fileSuccess){
-                initConfig();
-                created = true;
-            }
-        }
-        if(!created) completeConfig();
+        if (Files.exists(CONFIG_FILE)) completeConfig();
+        else initConfig();
     }
 
-    private Properties getConfig() throws IOException {
-        return FileResourcesUtils.readPropertiesFile(CONFIG_DIR+CONFIG_FILE);
+    private Properties getConfig() {
+        if (!Files.exists(CONFIG_FILE))
+            return new Properties();
+        try (InputStream fis = Files.newInputStream(CONFIG_FILE)) {
+            Properties prop = new Properties();
+            prop.load(fis);
+            return prop;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static Config getInstance() throws IOException {
@@ -69,17 +69,13 @@ public class Config {
         return this.getConfig().getProperty(key);
     }
 
-    public void set(String key, String value) throws IOException {
-        this.getConfig().setProperty(key,value);
-    }
-
     /**
      * Initialize config file with default params and save it
      * @throws IOException cannot save config file
      */
     private void initConfig() throws IOException {
-        Properties props = this.getConfig();
-        DEFAULT_CONFIG.forEach((key, value) -> props.put(key,value));
+        Properties props = new Properties();
+        props.putAll(DEFAULT_CONFIG);
         saveConfig(props);
     }
 
@@ -109,8 +105,8 @@ public class Config {
      * @throws IOException cannot save config file
      */
     public void saveConfig(Properties toBeSaved) throws IOException {
-        String path = CONFIG_DIR+CONFIG_FILE;
-        FileOutputStream outputStream = new FileOutputStream(path);
-        toBeSaved.store(outputStream,CONFIG_FILE_DESCRIPTION);
+        try (OutputStream outputStream = Files.newOutputStream(CONFIG_FILE)) {
+            toBeSaved.store(outputStream, CONFIG_FILE_DESCRIPTION);
+        }
     }
 }

@@ -13,7 +13,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.WallSignBlock;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.JsonHelper;
@@ -84,12 +84,12 @@ public class SignManager {
      * @return true if private, false if not
      */
     public boolean isSignPrivate() {
-        CompoundTag tag = new CompoundTag();
-        tag = this.sign.toTag(tag);
+        NbtCompound tag = new NbtCompound();
+        tag = this.sign.writeNbt(tag);
 
         JsonObject json = JsonHelper.deserialize(tag.getString("Text1"));
         String text = json.get("text").getAsString();
-        text = TextHelpers.removeMinecraftFormatingCodes(text);
+        text = TextHelpers.removeMinecraftFormattingCodes(text);
 
         // Check if sign has [Private] or [More users] tag
         boolean privateTag = text.equals(PrivateTag.PRIVATE.getTagWithBrackets());
@@ -170,7 +170,7 @@ public class SignManager {
                 continue; // Skip on empty line
             }
 
-            username = TextHelpers.removeMinecraftFormatingCodes(username);
+            username = TextHelpers.removeMinecraftFormattingCodes(username);
             String usernameS = username.asString();
             try {
                 ApiUser profile = authHelper.getOnlineUUID(usernameS);

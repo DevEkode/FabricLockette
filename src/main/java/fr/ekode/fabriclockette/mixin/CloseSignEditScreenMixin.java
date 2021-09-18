@@ -1,13 +1,14 @@
 package fr.ekode.fabriclockette.mixin;
 
-import fr.ekode.fabriclockette.events.CloseSignGuiCallback;
+import fr.ekode.fabriclockette.core.PlayerHelper;
+import fr.ekode.fabriclockette.managers.SignManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
+import net.minecraft.server.filter.TextStream;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,12 +30,19 @@ public class CloseSignEditScreenMixin {
     public ServerPlayerEntity player;
 
     @SuppressWarnings({"LineLength", "FinalParameters"})
-    @Inject(method = "method_31282", locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true, at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;updateListeners(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/block/BlockState;I)V"))
-    private void onSignUpdate(UpdateSignC2SPacket updateSignC2SPacket, List list, CallbackInfo ci, ServerWorld serverWorld, BlockPos blockPos, BlockState blockState, SignBlockEntity signBlockEntity) {
-        ActionResult result = CloseSignGuiCallback.EVENT.invoker().interact(signBlockEntity, this.player);
+    @Inject(method = "onSignUpdate(Lnet/minecraft/network/packet/c2s/play/UpdateSignC2SPacket;Ljava/util/List;)V", locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true, at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;updateListeners(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/block/BlockState;I)V"))
+    private void onSignUpdate(UpdateSignC2SPacket updateSignC2SPacket, List<TextStream.Message> signText, CallbackInfo ci, ServerWorld serverWorld, BlockPos blockPos, BlockState blockState, SignBlockEntity signBlockEntity) {
+        SignManager signManager = new SignManager(signBlockEntity);
 
-        if (result == ActionResult.FAIL) {
-            ci.cancel();
+        if (signManager.isSignPrivate() && signManager.getAttachedContainer() != null) {
+            signManager.populateSignUuids();
+
+            if (signManager.hasOwners()) {
+                signManager.formatSign();
+                PlayerHelper.sendBlockProtectedMessage(player);
+            }
+        } else {
+            signManager.removeSignOwners();
         }
     }
 }

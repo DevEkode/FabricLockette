@@ -14,9 +14,9 @@ public final class TextHelpers {
      * @param rawText text with §_ codes to remove
      * @return text without §_ codes
      */
-    public static Text removeMinecraftFormatingCodes(final Text rawText) {
+    public static Text removeMinecraftFormattingCodes(final Text rawText) {
         String textS = rawText.asString();
-        String parsed = removeMinecraftFormatingCodes(textS);
+        String parsed = removeMinecraftFormattingCodes(textS);
         return new LiteralText(parsed);
     }
 
@@ -25,7 +25,7 @@ public final class TextHelpers {
      * @param rawText text to remove formating codes
      * @return text without formating code
      */
-    public static String removeMinecraftFormatingCodes(final String rawText) {
+    public static String removeMinecraftFormattingCodes(final String rawText) {
         return rawText.replaceAll("\\§[a0-z9]", "");
     }
 }
