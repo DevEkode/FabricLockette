@@ -35,8 +35,8 @@ public class EntityExplosionBehaviorMixin {
         }
 
         BlockEntity entity = world.getBlockEntity(pos);
-        if (entity instanceof SignBlockEntity) {
-            SignManager signManager = new SignManager((SignBlockEntity) entity);
+        if (entity instanceof SignBlockEntity signBlockEntity) {
+            SignManager signManager = new SignManager(signBlockEntity);
             if (signManager.isSignPrivate()) {
                 cir.setReturnValue(false);
             }

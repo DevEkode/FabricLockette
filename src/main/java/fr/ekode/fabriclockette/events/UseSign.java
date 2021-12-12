@@ -33,21 +33,22 @@ public class UseSign implements EventRegistrator {
                 BlockPos pos = attachedBlock.getBlockPos();
                 boolean canBeProtected = ProtectedBlockRepository.canThisBlockBeProtected(world, pos);
 
-                if (canBeProtected && !signManager.isSignPrivate()) {
-                    // Check if the sign can be place at this position
-                    if (signManager.canPlacePrivateSign(world, attachedBlock.getBlockPos(), sign.getPos(), facing)) {
-                        ContainerManager containerManager = new ContainerManager(world, attachedBlock.getBlockPos());
-                        if (containerManager.searchPrivateSignResult().size() >= 1) {
-                            // Create a [More users] sign because a [private] already exist for this block
-                            signManager.createDefaultSign(player, PrivateTag.MORE_USERS);
-                        } else {
-                            // Create a [private] sign
-                            signManager.createDefaultSign(player, PrivateTag.PRIVATE);
-                        }
-                        PlayerHelper.sendBlockProtectedMessage(player);
-                        // Prevent sign GUI to be opened
-                        return ActionResult.FAIL;
+                // Check if the sign can be place at this position
+                if (canBeProtected
+                        && !signManager.isSignPrivate()
+                        && signManager.canPlacePrivateSign(world, attachedBlock.getBlockPos(), sign.getPos(), facing)) {
+
+                    ContainerManager containerManager = new ContainerManager(world, attachedBlock.getBlockPos());
+                    if (containerManager.searchPrivateSignResult().size() >= 1) {
+                        // Create a [More users] sign because a [private] already exist for this block
+                        signManager.createDefaultSign(player, PrivateTag.MORE_USERS);
+                    } else {
+                        // Create a [private] sign
+                        signManager.createDefaultSign(player, PrivateTag.PRIVATE);
                     }
+                    PlayerHelper.sendBlockProtectedMessage(player);
+                    // Prevent sign GUI to be opened
+                    return ActionResult.FAIL;
                 }
             }
 

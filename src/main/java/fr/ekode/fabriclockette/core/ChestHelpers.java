@@ -52,8 +52,8 @@ public final class ChestHelpers {
 
         // Get second chest in world
         BlockEntity entity = world.getBlockEntity(firstChest.getPos().offset(secondChestDir));
-        if (entity instanceof ChestBlockEntity) {
-            return (ChestBlockEntity) entity;
+        if (entity instanceof ChestBlockEntity chestBlockEntity) {
+            return chestBlockEntity;
         }
         return null;
     }

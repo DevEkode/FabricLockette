@@ -183,13 +183,8 @@ public final class Config {
      * @throws IOException cannot save config file
      */
     public void saveConfig(final Properties toBeSaved) throws IOException {
-        FileOutputStream outputStream = null;
-        try {
-            outputStream = new FileOutputStream(this.configPath.toString());
+        try(FileOutputStream outputStream = new FileOutputStream(this.configPath.toString())) {
             toBeSaved.store(outputStream, configFileDescription);
-        } finally {
-            assert outputStream != null;
-            outputStream.close();
         }
     }
 }

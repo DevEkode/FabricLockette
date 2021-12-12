@@ -105,6 +105,6 @@ public final class ProtectedBlockRepository {
             return posList;
         }
 
-        return null;
+        return Collections.emptyMap();
     }
 }

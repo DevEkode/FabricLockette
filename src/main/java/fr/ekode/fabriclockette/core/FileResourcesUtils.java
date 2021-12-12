@@ -1,5 +1,7 @@
 package fr.ekode.fabriclockette.core;
 
+import fr.ekode.fabriclockette.utils.FabricLogger;
+
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.File;
@@ -78,7 +80,7 @@ public class FileResourcesUtils {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+                FabricLogger.logError(line);
             }
 
         } catch (IOException e) {
@@ -97,7 +99,9 @@ public class FileResourcesUtils {
         List<String> lines;
         try {
             lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
-            lines.forEach(System.out::println);
+            for(String line : lines){
+                FabricLogger.logInfo(line);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -111,17 +115,12 @@ public class FileResourcesUtils {
      * @throws IOException
      */
     public static Properties readPropertiesFile(final String fileName) throws IOException {
-        FileInputStream fis = null;
         Properties prop = null;
-        try {
-            fis = new FileInputStream(fileName);
+        try(FileInputStream fis = new FileInputStream(fileName);) {
             prop = new Properties();
             prop.load(fis);
         } catch (IOException fnfe) {
             fnfe.printStackTrace();
-        } finally {
-            assert fis != null;
-            fis.close();
         }
         return prop;
     }

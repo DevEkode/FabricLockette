@@ -16,7 +16,7 @@ public interface OpenSignGuiCallback {
      * - FAIL cancels further processing and does not open sign GUI.
      */
     Event<OpenSignGuiCallback> EVENT = EventFactory.createArrayBacked(OpenSignGuiCallback.class,
-            (listeners) -> (player, sign) -> {
+            listeners -> (player, sign) -> {
                 for (OpenSignGuiCallback listener : listeners) {
                     ActionResult result = listener.interact(player, sign);
 
