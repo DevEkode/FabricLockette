@@ -6,8 +6,13 @@ plugins {
     id 'java'
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+def compat_version = JavaVersion.VERSION_17
+if(project.minecraft_version == '1.16.5'){
+    compat_version = JavaVersion.VERSION_16;
+}
+
+sourceCompatibility = compat_version
+targetCompatibility = compat_version
 
 archivesBaseName = project.archives_base_name+'-mc'+project.archives_mc_version
 //version = project.mod_version
@@ -82,11 +87,13 @@ tasks.withType(JavaCompile).configureEach {
     // The Minecraft launcher currently installs Java 8 for users, so your mod probably wants to target Java 8 too
     // JDK 9 introduced a new way of specifying this that will make sure no newer classes or methods are used.
     // We'll use that if it's available, but otherwise we'll use the older option.
-    /*def targetVersion = 17
-    if (JavaVersion.current().isJava9Compatible()) {
-        it.options.release = targetVersion
-    }*/
-    it.options.release = 17
+
+    // Support Java 16 and 17 based on minecraft version used
+    def version = 17
+    if(project.minecraft_version == '1.16.5'){
+        version = 16;
+    }
+    it.options.release = version
 }
 
 // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
