@@ -68,5 +68,6 @@ class DoorHelperTest {
 
     @Test
     void searchSecondDoorBlock() {
+        assertTrue(true);
     }
 }

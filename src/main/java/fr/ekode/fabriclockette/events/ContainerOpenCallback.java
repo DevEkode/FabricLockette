@@ -18,7 +18,7 @@ public interface ContainerOpenCallback {
      * - FAIL cancels further processing and does not open sign GUI.
      */
     Event<ContainerOpenCallback> EVENT = EventFactory.createArrayBacked(ContainerOpenCallback.class,
-            (listeners) -> (world, player, blockState, pos) -> {
+            listeners -> (world, player, blockState, pos) -> {
                 for (ContainerOpenCallback listener : listeners) {
                     ActionResult result = listener.interact(world, player, blockState, pos);
 

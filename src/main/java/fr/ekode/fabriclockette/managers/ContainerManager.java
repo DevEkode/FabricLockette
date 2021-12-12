@@ -5,6 +5,7 @@ import fr.ekode.fabriclockette.blocks.ProtectedBlockRepository;
 import fr.ekode.fabriclockette.core.TextHelpers;
 import fr.ekode.fabriclockette.utils.ServerConfigUtils;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.SignBlock;
 import net.minecraft.block.WallSignBlock;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -126,28 +127,39 @@ public class ContainerManager {
             }
 
             for (SignBlockEntity sign : privateSigns) {
-                SignManager signManager = new SignManager(sign);
-                if (ServerConfigUtils.isOnline()) { // When the server uses Mojang auth
-                    // Get owners
-                    List<UUID> owners = signManager.getSignOwners();
+                if(isSignContainingPlayer(player,sign)) return true;
+            }
+        }
+        return false;
+    }
 
-                    UUID playerUuid = player.getUuid();
+    /**
+     * Check if the sign is containing provided player
+     * @param player the player to check
+     * @param sign the sign to check
+     * @return boolean
+     */
+    private boolean isSignContainingPlayer(PlayerEntity player, SignBlockEntity sign){
+        SignManager signManager = new SignManager(sign);
+        if (ServerConfigUtils.isOnline()) { // When the server uses Mojang auth
+            // Get owners
+            List<UUID> owners = signManager.getSignOwners();
 
-                    for (UUID owner : owners) {
-                        if (owner != null && owner.equals(playerUuid)) {
-                            return true;
-                        }
-                    }
-                } else { // When the server is not using Mojang Auth
-                    List<Text> owners = signManager.getSignUsernames();
-                    String playerUsername = player.getName().getString();
+            UUID playerUuid = player.getUuid();
 
-                    for (Text owner : owners) {
-                        String ownerFiltered = TextHelpers.removeMinecraftFormatingCodes(owner).getString();
-                        if (ownerFiltered.equals(playerUsername)) {
-                            return true;
-                        }
-                    }
+            for (UUID owner : owners) {
+                if (owner != null && owner.equals(playerUuid)) {
+                    return true;
+                }
+            }
+        } else { // When the server is not using Mojang Auth
+            List<Text> owners = signManager.getSignUsernames();
+            String playerUsername = player.getName().getString();
+
+            for (Text owner : owners) {
+                String ownerFiltered = TextHelpers.removeMinecraftFormatingCodes(owner).getString();
+                if (ownerFiltered.equals(playerUsername)) {
+                    return true;
                 }
             }
         }

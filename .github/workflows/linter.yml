@@ -6,8 +6,7 @@ name: Lint Code Base
 #
 
 on:
-  pull_request:
-    branches: [main,develop]
+  workflow_dispatch:
 
 ###############
 # Set the Job #
@@ -42,4 +41,4 @@ jobs:
           reporter: github-pr-review
           level: error
           checkstyle_config: sun_checks.xml
-          fail_on_error: true
+          fail_on_error: false

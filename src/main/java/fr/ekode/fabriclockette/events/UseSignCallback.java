@@ -17,7 +17,7 @@ public interface UseSignCallback {
      * - FAIL cancels further processing and does not open sign GUI.
      */
     Event<UseSignCallback> EVENT = EventFactory.createArrayBacked(UseSignCallback.class,
-            (listeners) -> (player, sign) -> {
+            listeners -> (player, sign) -> {
                 for (UseSignCallback listener : listeners) {
                     ActionResult result = listener.interact(player, sign);
 

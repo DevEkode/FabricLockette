@@ -8,7 +8,9 @@ import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.SignBlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
+import net.minecraft.world.World;
 
 public class AttackBlock implements EventRegistrator {
 
@@ -29,20 +31,34 @@ public class AttackBlock implements EventRegistrator {
                 }
             }
             // Prevent private sign to be broken by another player
-            if (blockEntity instanceof SignBlockEntity) {
-                SignManager signManager = new SignManager((SignBlockEntity) blockEntity);
-                BlockStatePos blockStatePos = signManager.getAttachedContainer();
+            if (blockEntity instanceof SignBlockEntity signBlockEntity
+                    && isSignBreakable(world,playerEntity,signBlockEntity)) {
 
-                if (blockStatePos != null) {
-                    ContainerManager containerManager = new ContainerManager(world, blockStatePos.getBlockPos());
-                    boolean isProtected = containerManager.isProtected();
-                    boolean isOwner = containerManager.isOwner(playerEntity);
-                    if (isProtected && !isOwner) {
-                        return ActionResult.FAIL;
-                    }
-                }
+                return ActionResult.FAIL;
             }
             return ActionResult.PASS;
         });
+    }
+
+    /**
+     * Check if the provided sign is breakable
+     * @param world sign current world
+     * @param playerEntity player breaking the sign
+     * @param signBlockEntity Sign to check
+     * @return boolean
+     */
+    private boolean isSignBreakable(World world, PlayerEntity playerEntity, SignBlockEntity signBlockEntity){
+        SignManager signManager = new SignManager(signBlockEntity);
+        BlockStatePos blockStatePos = signManager.getAttachedContainer();
+
+        if (blockStatePos != null) {
+            ContainerManager containerManager = new ContainerManager(world, blockStatePos.getBlockPos());
+            boolean isProtected = containerManager.isProtected();
+            boolean isOwner = containerManager.isOwner(playerEntity);
+
+            return !isProtected || isOwner;
+        }
+
+        return true;
     }
 }
