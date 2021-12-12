@@ -17,10 +17,12 @@ public class OpenSignGui implements EventRegistrator {
             SignManager signManager = new SignManager(sign);
             if (signManager.isSignPrivate()) {
                 BlockStatePos blockStatePos = signManager.getAttachedContainer();
-                ContainerManager containerManager = new ContainerManager(sign.getWorld(), blockStatePos.getBlockPos());
-                if (containerManager.isProtected() && !containerManager.isOwner(player)) {
-                    PlayerHelper.sendAccessDeniedMessage(player);
-                    return ActionResult.FAIL;
+                if(blockStatePos != null){
+                    ContainerManager containerManager = new ContainerManager(sign.getWorld(), blockStatePos.getBlockPos());
+                    if (containerManager.isProtected() && !containerManager.isOwner(player)) {
+                        PlayerHelper.sendAccessDeniedMessage(player);
+                        return ActionResult.FAIL;
+                    }
                 }
             }
             return ActionResult.PASS;
