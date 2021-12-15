@@ -31,7 +31,7 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Retrieve last version tag
         run: |
-          echo ::set-env name=VERSION_TAG::$(git describe --abbrev=0 --tags)
+          echo "VERSION_TAG=$(git describe --abbrev=0 --tags)" >> $GITHUB_ENV
       # Build Release
       - name: Build with Gradle (Release ${{env.VERSION_TAG}})
         if: ${{ !contains(env.VERSION_TAG,'rc') }}
