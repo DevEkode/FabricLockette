@@ -5,31 +5,34 @@ on:
     tags:
       - "v*"
     branches:
-      - main
+      - 'ver/**'
 
 jobs:
   release:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ '16', '17' ]
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
+      # Checkout the current repo
       - uses: actions/checkout@v2
-      - name: Set up JDK 17
+      # Install required JDK
+      - name: Set up JDK ${{ matrix.Java }}
         uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
-          java-version: '17'
-      - name: Cache Gradle packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
+          java-version: ${{ matrix.java }}
+          cache: 'gradle'
+      # Build Release
       - name: Build with Gradle (Release)
         if: ${{ !contains(github.ref,'rc') }}
         run: ./gradlew -Prelease.useLastTag=true final
+      # Build PreRelease
       - name: Build with Gradle (PreRelease)
         if: contains(github.ref,'rc')
         run: ./gradlew -Prelease.useLastTag=true candidate
+      # Package artifact
       - name: Package jar into artifact
         uses: actions/upload-artifact@v2
         with:

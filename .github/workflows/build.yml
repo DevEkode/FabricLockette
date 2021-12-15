@@ -16,21 +16,19 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ '16', '17' ]
     steps:
       # Checkout the current repo
       - uses: actions/checkout@v2
-      - name: Set up JDK 17
+      # Install required JDK
+      - name: Set up JDK ${{ matrix.Java }}
         uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
-          java-version: '17'
-      # Cache or recover previous Gradle packages
-      - name: Cache Gradle packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
+          java-version: ${{ matrix.java }}
+          cache: 'gradle'
       # Testing if the gradlew build succeed
       - name: Testing build
         run: ./gradlew build
