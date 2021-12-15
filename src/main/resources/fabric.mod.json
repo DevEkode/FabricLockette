@@ -2,19 +2,20 @@
   "schemaVersion": 1,
   "id": "fabriclockette",
   "version": "${version}",
-
   "name": "Fabric Lockette",
   "description": "This is a port of the famous bukkit plugin Lockette for Fabric",
   "authors": [
-    "Ekode"
+    {"name" : "Ekode", "contact":  {"email": "ekode@protonmail.com", "homepage": "https://ekode.fr"}}
+  ],
+  "contributors": [
+    {"name" : "JFronny", "contact":  {"homepage": "https://github.com/JFronny"}}
   ],
   "contact": {
-    "homepage": "",
-    "sources": "https://github.com/DevEkode/FabricLockette"
+    "email" : "ekode@protonmail.com",
+    "sources": "https://github.com/DevEkode/FabricLockette",
+    "issues": "https://github.com/DevEkode/FabricLockette/issues"
   },
-
   "license": "CC0-1.0",
-
   "environment": "server",
   "entrypoints": {
     "main": [
@@ -25,10 +26,10 @@
     "fabriclockette.mixins.json",
     "fabriclockette-protectedBlocks.mixins.json"
   ],
-
   "depends": {
-    "fabricloader": ">=0.7.4",
+    "fabricloader": ">=0.12.12",
     "fabric": "*",
-    "minecraft": "1.16.x"
+    "minecraft": "1.16.x",
+    "java": ">=16"
   }
 }

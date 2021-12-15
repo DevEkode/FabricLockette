@@ -1,6 +1,5 @@
 package fr.ekode.fabriclockette.api;
 
-import javax.annotation.Generated;
 
 import com.github.f4b6a3.uuid.codec.UuidCodec;
 import com.github.f4b6a3.uuid.codec.base.Base16Codec;
@@ -9,7 +8,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.UUID;
 
-@Generated("jsonschema2pojo")
 public class ApiUser {
 
     /**

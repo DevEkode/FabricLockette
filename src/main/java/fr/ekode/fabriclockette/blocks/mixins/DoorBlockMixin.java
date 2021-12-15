@@ -103,8 +103,6 @@ public class DoorBlockMixin implements ProtectedBlock {
         ActionResult result = ContainerOpenCallback.EVENT.invoker().interact(world, player, state, pos);
 
         if (result == ActionResult.FAIL) {
-            //state = (BlockState)state.cycle(DoorBlock.OPEN);
-            //world.setBlockState(pos, state, 10);
             cir.setReturnValue(ActionResult.PASS);
         }
     }

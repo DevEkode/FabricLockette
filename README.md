@@ -13,6 +13,18 @@ Port of the famous bukkit/spigot plugin "Lockette" for Fabric
 * Fabric (server) : [Installation tutorial](https://fabricmc.net/use/)
 * Fabric API : [Curseforge page](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
 
+# Supported Minecraft version
+
+| MC Version |     Supported      | Last release |
+|------------|:------------------:|--------------|
+| 1.18       |   :construction:   |              |
+| 1.17       |   :construction:   |              |
+| 1.16.5     | :heavy_check_mark: |              |
+
+:heavy_check_mark: : Supported.  
+:x: : Not supported.  
+:construction: : Work being done to be soon supported.
+
 ## How to install
 Go to the last release page and grab the corresponding version.  
 Then copy your `Fabric API` and `FabricLockette` jar into the `mods` folder of your server.
@@ -23,7 +35,7 @@ Check the wiki page for more details : [Config wiki](https://github.com/DevEkode
 ## Features
 * Prevent any protected block to be used by another player
 * Protect from TNT
-* Support UUID
+* Support UUID (only with `online-mode=true`, it will use usernames instead)
 * Server-side Fabric installation (no client mod required)
 * No database needed (everything is stored in the world data as nbt tags)
 * Enable and disable protection for each supported blocks.

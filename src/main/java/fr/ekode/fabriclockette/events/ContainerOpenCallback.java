@@ -8,8 +8,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.io.IOException;
-
 public interface ContainerOpenCallback {
     /**
      * Callback for opening a container
@@ -20,14 +18,24 @@ public interface ContainerOpenCallback {
      * - FAIL cancels further processing and does not open sign GUI.
      */
     Event<ContainerOpenCallback> EVENT = EventFactory.createArrayBacked(ContainerOpenCallback.class,
-            (listeners) -> (world,player,blockState,pos) -> {
-                for(ContainerOpenCallback listener : listeners){
-                    ActionResult result = listener.interact(world,player,blockState,pos);
+            listeners -> (world, player, blockState, pos) -> {
+                for (ContainerOpenCallback listener : listeners) {
+                    ActionResult result = listener.interact(world, player, blockState, pos);
 
-                    if(result != ActionResult.PASS) return result;
+                    if (result != ActionResult.PASS) {
+                        return result;
+                    }
                 }
                 return ActionResult.PASS;
             });
 
+    /**
+     * When a player interact with a block.
+     * @param world Current world
+     * @param player Player doing the action
+     * @param blockState State of the block interacted with
+     * @param pos Position of the block interacted with
+     * @return The result of the action
+     */
     ActionResult interact(World world, PlayerEntity player, BlockState blockState, BlockPos pos);
 }
