@@ -29,14 +29,17 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+      - name: Retrieve last version tag
+        run: |
+          echo ::set-env name=VERSION_TAG::$(git describe --abbrev=0 --tags)
       # Build Release
-      - name: Build with Gradle (Release)
-        if: ${{ !contains(github.ref,'rc') }}
-        run: ./gradlew -Prelease.useLastTag=true final
+      - name: Build with Gradle (Release ${{env.VERSION_TAG}})
+        if: ${{ !contains(env.VERSION_TAG,'rc') }}
+        run: ./gradlew -Prelease.version=${{env.VERSION_TAG}} final
       # Build PreRelease
-      - name: Build with Gradle (PreRelease)
-        if: contains(github.ref,'rc')
-        run: ./gradlew -Prelease.useLastTag=true candidate
+      - name: Build with Gradle (PreRelease ${{env.VERSION_TAG}})
+        if: contains(env.VERSION_TAG,'rc')
+        run: ./gradlew -Prelease.version=${{env.VERSION_TAG}} candidate
       # Package artifact
       - name: Package jar into artifact
         uses: actions/upload-artifact@v2
