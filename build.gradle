@@ -62,7 +62,7 @@ shadowJar {
 
 nebulaRelease {
     // Adding ver/ branches to release pattern
-    addReleaseBranchPattern(/ver/)
+    addReleaseBranchPattern(/ver\\/.*/)
 }
 
 remapJar {
