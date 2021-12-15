@@ -1,16 +1,11 @@
-name: Release
+name: Manual release
 
-on:
-  push:
-    tags:
-      - "v*"
-    branches:
-      - 'ver/**'
+on: workflow_dispatch
 
 jobs:
   release:
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/heads/ver')
     steps:
       # Checkout the current repo
       - uses: actions/checkout@v2
