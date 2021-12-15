@@ -8,12 +8,12 @@ plugins {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(16))
+        languageVersion.set(JavaLanguageVersion.of(project.java_version))
     }
 }
 
-sourceCompatibility = JavaVersion.VERSION_16
-targetCompatibility = JavaVersion.VERSION_16
+sourceCompatibility = project.java_version
+targetCompatibility = project.java_version
 
 archivesBaseName = project.archives_base_name+'-mc'+project.archives_mc_version
 //version = project.mod_version
@@ -90,7 +90,7 @@ tasks.withType(JavaCompile).configureEach {
     // We'll use that if it's available, but otherwise we'll use the older option.
 
     // Support Java 16 and 17 based on minecraft version used
-    it.options.release = 16
+    it.options.release = project.java_version as Integer
 }
 
 // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
