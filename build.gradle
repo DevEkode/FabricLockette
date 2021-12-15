@@ -60,6 +60,11 @@ shadowJar {
     minimize()
 }
 
+nebulaRelease {
+    // Adding ver/ branches to release pattern
+    addReleaseBranchPattern(/ver/)
+}
+
 remapJar {
     dependsOn shadowJar
     input.set shadowJar.archiveFile.get()
