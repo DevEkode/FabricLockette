@@ -32,7 +32,7 @@ public class AttackBlock implements EventRegistrator {
             }
             // Prevent private sign to be broken by another player
             if (blockEntity instanceof SignBlockEntity signBlockEntity
-                    && isSignBreakable(world,playerEntity,signBlockEntity)) {
+                    && !isSignBreakable(world,playerEntity,signBlockEntity)) {
 
                 return ActionResult.FAIL;
             }
