@@ -33,15 +33,15 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Retrieve last version tag
         run: |
-          echo "VERSION_TAG=$(git describe --abbrev=0 --tags)" >> $GITHUB_ENV
+          echo "VERSION_TAG=$(git describe --abbrev=0 --tags | | sed 's/v//')" >> $GITHUB_ENV
       # Build Release
       - name: Build with Gradle (Release ${{env.VERSION_TAG}})
         if: ${{ !contains(env.VERSION_TAG,'rc') }}
-        run: ./gradlew -Prelease.version=${{env.VERSION_TAG}} final
+        run: ./gradlew -Prelease.disableGitChecks=true -Prelease.version=${{env.VERSION_TAG}} final
       # Build PreRelease
       - name: Build with Gradle (PreRelease ${{env.VERSION_TAG}})
         if: contains(env.VERSION_TAG,'rc')
-        run: ./gradlew -Prelease.version=${{env.VERSION_TAG}} candidate
+        run: ./gradlew -Prelease.disableGitChecks=true -Prelease.version=${{env.VERSION_TAG}} candidate
       # Package artifact
       - name: Package jar into artifact
         uses: actions/upload-artifact@v2
