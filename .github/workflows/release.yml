@@ -46,5 +46,4 @@ jobs:
       - name: Package jar into artifact
         uses: actions/upload-artifact@v2
         with:
-          name: Releases
-          path: build/libs
+          path: build/libs/**/*.jar
