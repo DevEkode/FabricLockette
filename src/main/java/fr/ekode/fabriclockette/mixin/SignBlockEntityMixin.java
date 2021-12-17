@@ -7,6 +7,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import org.spongepowered.asm.mixin.Final;
@@ -88,15 +89,15 @@ public class SignBlockEntityMixin implements SignBlockEntityExt {
     }
 
     // Inject code for retrieving owners from sign nbt tags
-    @Inject(method = "fromTag", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/text/Text$Serializer;fromJson(Ljava/lang/String;)Lnet/minecraft/text/MutableText;",
+    @Inject(method = "readNbt", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/block/entity/SignBlockEntity;parseTextFromJson(Ljava/lang/String;)Lnet/minecraft/text/Text;",
             shift = At.Shift.AFTER),
             locals = LocalCapture.CAPTURE_FAILSOFT)
-    private void fromTag(final BlockState state, final NbtCompound tag, final CallbackInfo ci, final int i) {
+    private void readNbt(NbtCompound nbt, CallbackInfo ci, int i, String string) {
         String tagName = PrivateSignNbt.OWNER.getNbtTag() + (i + 1);
 
-        if (i > 0 && tag.containsUuid(tagName)) {
-            UUID owner = tag.getUuid(tagName);
+        if (i > 0 && nbt.containsUuid(tagName)) {
+            UUID owner = nbt.getUuid(tagName);
             this.owners[i-1] = owner;
         }
     }
@@ -117,11 +118,11 @@ public class SignBlockEntityMixin implements SignBlockEntityExt {
     /**
      * Allow player to edit sign after first place.
      * @param player Editing player
-     * @param callback callback of the event
+     * @param cir callback of the event
      */
     @Inject(method = "onActivate", at = @At("HEAD"), cancellable = true)
-    public void useOnBlock(final PlayerEntity player, final CallbackInfoReturnable<Boolean> callback) {
-        if (player.abilities.allowModifyWorld) {
+    public void useOnBlock(ServerPlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
+        if (player.getAbilities().allowModifyWorld) {
             editable = true;
             SignBlockEntity sign = (SignBlockEntity) (Object) this;
 
