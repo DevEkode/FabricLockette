@@ -34,6 +34,7 @@ jobs:
       - name: Retrieve last version tag
         run: |
           echo "VERSION_TAG=$(git describe --abbrev=0 --tags | sed 's/v//')" >> $GITHUB_ENV
+          echo "ARTIFACT_TAG=$(echo ${GITHUB_REF#refs/heads/} | awk '{ print substr( $0, 5 ) }')" >> $GITHUB_ENV
       # Build Release
       - name: Build with Gradle (Release ${{env.VERSION_TAG}})
         if: ${{ !contains(env.VERSION_TAG,'rc') }}
@@ -46,5 +47,5 @@ jobs:
       - name: Package jar into artifact
         uses: actions/upload-artifact@v2
         with:
-          name: FabricLockette-${{github.ref_name}}-${{env.VERSION_TAG}}
+          name: FabricLockette-${{env.ARTIFACT_TAG}}-${{env.VERSION_TAG}}
           path: build/libs/**/*.jar
