@@ -107,11 +107,11 @@ public class SignBlockEntityMixin implements SignBlockEntityExt {
             target = "Lnet/minecraft/text/Text$Serializer;toJson(Lnet/minecraft/text/Text;)Ljava/lang/String;",
             shift = At.Shift.AFTER),
             locals = LocalCapture.CAPTURE_FAILSOFT)
-    private void writeNbt(final NbtCompound tag, final CallbackInfoReturnable<NbtCompound> cir, final int i) {
+    private void writeNbt(NbtCompound nbt, CallbackInfo ci, int i, Text text) {
         String tagName = PrivateSignNbt.OWNER.getNbtTag() + (i + 1);
 
         if (i > 0 && this.owners[i-1] != null) {
-            tag.putUuid(tagName, this.owners[i-1]);
+            nbt.putUuid(tagName, this.owners[i-1]);
         }
     }
 

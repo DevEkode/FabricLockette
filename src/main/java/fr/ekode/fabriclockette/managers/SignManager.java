@@ -84,11 +84,13 @@ public class SignManager {
      * @return true if private, false if not
      */
     public boolean isSignPrivate() {
-        NbtCompound tag = new NbtCompound();
+        /*NbtCompound tag = new NbtCompound();
         tag = this.sign.writeNbt(tag);
 
         JsonObject json = JsonHelper.deserialize(tag.getString("Text1"));
-        String text = json.get("text").getAsString();
+        String text = json.get("text").getAsString();*/
+
+        String text = this.sign.getTextOnRow(0,true).asString();
         text = TextHelpers.removeMinecraftFormatingCodes(text);
 
         // Check if sign has [Private] or [More users] tag
