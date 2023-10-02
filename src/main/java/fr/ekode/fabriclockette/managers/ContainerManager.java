@@ -2,6 +2,7 @@ package fr.ekode.fabriclockette.managers;
 
 import com.mojang.authlib.GameProfile;
 import fr.ekode.fabriclockette.blocks.ProtectedBlockRepository;
+import fr.ekode.fabriclockette.core.PlayerHelper;
 import fr.ekode.fabriclockette.core.TextHelpers;
 import fr.ekode.fabriclockette.utils.ServerConfigUtils;
 import net.minecraft.block.BlockState;
@@ -88,7 +89,21 @@ public class ContainerManager {
         }
 
         List<SignBlockEntity> list = searchPrivateSignResult();
-        return !list.isEmpty();
+
+        List<SignBlockEntity> new_list = new ArrayList<>();
+        for (SignBlockEntity sign : list) {
+            SignManager signManager = new SignManager(sign);
+            if (!signManager.hasOwners()) {
+                // Error
+                signManager.removeSignOwners();
+                // Destroy sign
+                sign.getWorld().breakBlock(sign.getPos(),true);
+            } else {
+                new_list.add(sign);
+            }
+        }
+
+        return !new_list.isEmpty();
     }
 
     /**

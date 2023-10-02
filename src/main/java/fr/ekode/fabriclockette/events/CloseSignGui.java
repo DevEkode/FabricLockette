@@ -23,8 +23,14 @@ public class CloseSignGui implements EventRegistrator {
             BlockStatePos container = signManager.getAttachedContainer();
             if(container == null) return ActionResult.PASS;
 
-            // Check if player own this container or if it's not protected
+            if (!signManager.hasOwners()) return ActionResult.PASS;
+
             ContainerManager containerManager = new ContainerManager(sign.getWorld(),container.getBlockPos());
+            if (containerManager.isProtected() && !containerManager.isOwner(player)) {
+                return ActionResult.PASS;
+            }
+
+            // Check if player own this container or if it's not protected
             if(containerManager.isOwner(player) || !containerManager.isProtected()){
                 // Success
                 signManager.populateSignUuids();
